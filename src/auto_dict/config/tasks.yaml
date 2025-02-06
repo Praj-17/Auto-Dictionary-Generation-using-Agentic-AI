@@ -14,7 +14,9 @@ research_task:
   description: >
     1. Observe the given keywords extracted from the context and research about them on the internet
     2. Draft a standard defination and an example for each of the keywords
-    3. Ensure there is no semantic or syntatic redundancy in the keywords
+    3 Find out the right POS TAG for the keyword
+    4. Search the internet for any alternate meanings and synonyms of the keyword - 
+    5. Ensure there is no semantic or syntatic redundancy in the keywords
 
     Context: {context}
   expected_output: >

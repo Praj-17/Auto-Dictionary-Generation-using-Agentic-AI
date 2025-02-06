@@ -119,10 +119,10 @@ if __name__ == '__main__':
         texts = text.split("\n")
     text= texts[100]
 
-    text = "\n".join(texts[:100])
+    text = "\n".join(texts[:5])
     output = asyncio.run(run_long(text))
 
-    with open("src/outputs/output_1.json", "w") as f:
+    with open("src/outputs/output_2.json", "w") as f:
         json.dump(output, f, indent=4)
 
     

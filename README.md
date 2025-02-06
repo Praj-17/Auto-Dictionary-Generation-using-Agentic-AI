@@ -1,54 +1,86 @@
-# AutoDict Crew
+# Auto-Dictionary Generation using Agentic-AI
 
-Welcome to the AutoDict Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+## Overview
+
+The "Auto-Dictionary Generation using Agentic-AI" project is an innovative approach to automatically creating dictionaries using agentic AI. This project leverages the capabilities of AI agents to define words, provide example sentences, and generate comprehensive dictionary entries, streamlining the dictionary creation process.
+
+## Features
+
+-   **Automated Word Definition:** Utilizes AI agents to generate accurate and context-aware definitions for words.
+-   **Example Sentence Generation:** Provides example sentences to illustrate the usage of words in different contexts.
+-   **Comprehensive Dictionary Entries:** Combines definitions and examples to create detailed dictionary entries.
+-   **Efficient Dictionary Creation:** Automates the dictionary creation process, saving time and resources.
+-   **Extensible Architecture:** Designed with an extensible architecture to incorporate new words, definitions, and functionalities.
 
 ## Installation
 
-Ensure you have Python >=3.10 <3.13 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+To set up the project locally, follow these steps:
 
-First, if you haven't already, install uv:
+1.  Clone the repository:
 
-```bash
-pip install uv
-```
+    ```
+    git clone https://github.com/Praj-17/Auto-Dictionary-Generation-using-Agentic-AI.git
+    cd Auto-Dictionary-Generation-using-Agentic-AI
+    ```
 
-Next, navigate to your project directory and install the dependencies:
+2.  Install the required dependencies. It is recommended to use a virtual environment:
 
-(Optional) Lock the dependencies and install them by using the CLI command:
-```bash
-crewai install
-```
-### Customizing
+    ```
+    python -m venv venv
+    source venv/bin/activate  # On Linux/macOS
+    venv\Scripts\activate  # On Windows
+    pip install -r requirements.txt
+    ```
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+## Usage
 
-- Modify `src/auto_dict/config/agents.yaml` to define your agents
-- Modify `src/auto_dict/config/tasks.yaml` to define your tasks
-- Modify `src/auto_dict/crew.py` to add your own logic, tools and specific args
-- Modify `src/auto_dict/main.py` to add custom inputs for your agents and tasks
+1.  **Configuration:**
 
-## Running the Project
+    -   Configure the necessary API keys and environment variables in the `.env` file.
+    -   Modify the `src/auto_dict/configs` file to adjust any specific settings.
 
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
+2.  **Running the Project:**
 
-```bash
-$ crewai run
-```
+    -   To start the automated dictionary generation, run the main script:
 
-This command initializes the auto-dict Crew, assembling the agents and assigning them tasks as defined in your configuration.
+        ```
+        python main.py
+        ```
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+3.  **Reviewing the Output:**
 
-## Understanding Your Crew
+    -   The generated dictionary entries will be saved in the designated output file.
+    -   Review and validate the entries for accuracy and completeness.
 
-The auto-dict Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
+## Architecture
 
-## Support
+The project architecture consists of the following key components:
 
-For support, questions, or feedback regarding the AutoDict Crew or crewAI.
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
+-   **AI Agent Module:** Responsible for generating word definitions and example sentences.
+-   **Data Processing Module:** Handles data input, processing, and output.
+-   **Dictionary Generation Module:** Combines the generated definitions and examples to create dictionary entries.
+-   **API Integration Module:** Connects with external APIs for enhanced functionality.
 
-Let's create wonders together with the power and simplicity of crewAI.
+## Contributing
+
+Contributions are welcome! Here are some ways you can contribute:
+
+-   **Report Issues:** Submit bug reports and feature requests through GitHub issues.
+-   **Submit Pull Requests:** Contribute code improvements, new features, and bug fixes.
+-   **Improve Documentation:** Help enhance the project documentation.
+
+Please follow these guidelines when contributing:
+
+-   Follow the established coding style.
+-   Write clear and concise commit messages.
+-   Test your changes thoroughly.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Contact
+
+For questions, issues, or contributions, please contact [Praj-17](https://github.com/Praj-17).
+
+

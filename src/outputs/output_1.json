@@ -1,0 +1,292 @@
+[
+    [
+        {
+            "keyword": "InsideAR",
+            "definition": {
+                "definition": "InsideAR was the largest Augmented Reality event in Europe, organized annually by metaio GmbH until its cancellation in 2015 following Apple's acquisition of metaio.",
+                "example": "InsideAR was influential in the AR industry, attracting top-tier speakers.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [
+                    "AR conference",
+                    "technology event"
+                ],
+                "synonyms": [
+                    "AR Expo",
+                    "Augmented Reality Conference"
+                ]
+            }
+        },
+        {
+            "keyword": "metaio GmbH",
+            "definition": {
+                "definition": "Metaio GmbH was a pioneering company in Augmented Reality, whose technologies were foundational for Apple's AR advancements following their acquisition.",
+                "example": "Metaio GmbH pioneered many of the AR concepts used today.",
+                "pos_tag": "Proper Noun",
+                "alternate_meaning": [
+                    "AR developer",
+                    "software company"
+                ],
+                "synonyms": [
+                    "AR Innovator",
+                    "Technology Company"
+                ]
+            }
+        },
+        {
+            "keyword": "Augmented Reality",
+            "definition": {
+                "definition": "Augmented Reality involves overlaying digital content in the real-world environment, offering a blended experience for users.",
+                "example": "Challenges AR faces include integration into real-world environments seamlessly.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [
+                    "Mixed Reality",
+                    "Digital Overlay"
+                ],
+                "synonyms": [
+                    "AR",
+                    "Augmented Experience"
+                ]
+            }
+        },
+        {
+            "keyword": "Apple",
+            "definition": {
+                "definition": "Apple, a technology giant, acquired metaio GmbH in 2015 to enhance its AR capabilities, significantly advancing its ARKit.",
+                "example": "Apple acquired metaio GmbH to bolster its ARKit.",
+                "pos_tag": "Proper Noun",
+                "alternate_meaning": [
+                    "Tech company",
+                    "Electronics manufacturer"
+                ],
+                "synonyms": [
+                    "iPhone maker",
+                    "Cupertino-based company"
+                ]
+            }
+        },
+        {
+            "keyword": "The Fearing Mind",
+            "definition": {
+                "definition": "The Fearing Mind is an American horror TV series exploring the intersections of reality and imagination through the experiences of writer Bill Fearing.",
+                "example": "The Fearing Mind explores the blurry lines between reality and imagination.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [
+                    "Horror series",
+                    "TV show"
+                ],
+                "synonyms": [
+                    "Suspense Series",
+                    "Thriller Show"
+                ]
+            }
+        },
+        {
+            "keyword": "Bill Fearing",
+            "definition": {
+                "definition": "Bill Fearing is a fictional character, a suspense thriller writer, whose life events inspire the plot of the series The Fearing Mind.",
+                "example": "Bill Fearing's character is pivotal for conveying the show's suspenseful narrative.",
+                "pos_tag": "Proper Noun",
+                "alternate_meaning": [
+                    "Protagonist",
+                    "Writer Character"
+                ],
+                "synonyms": [
+                    "Suspense Writer",
+                    "Thriller Author"
+                ]
+            }
+        },
+        {
+            "keyword": "Bronze Barrel",
+            "definition": {
+                "definition": "Bronze barrels were used in early artillery, significant for their durability and historical use despite lacking modern recoil systems.",
+                "example": "Bronze barrels were pivotal in early artillery development.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [
+                    "Artillery component",
+                    "Cannon structure"
+                ],
+                "synonyms": [
+                    "Metal Barrel",
+                    "Artillery Barrel"
+                ]
+            }
+        },
+        {
+            "keyword": "Recoil System",
+            "definition": {
+                "definition": "Recoil systems absorb the backward momentum of firing a weapon, essential for the accuracy and safety of modern artillery.",
+                "example": "Modern recoil systems are integral for precision and safety.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [
+                    "Gun stabilization",
+                    "Artillery mechanism"
+                ],
+                "synonyms": [
+                    "Recoil Mechanism",
+                    "Recoil Absorber"
+                ]
+            }
+        },
+        {
+            "keyword": "Austrian Army",
+            "definition": {
+                "definition": "The Austrian Army has a notable history, particularly known for contributions to innovations in artillery technology.",
+                "example": "The Austrian Army has a rich history in innovations in artillery technology.",
+                "pos_tag": "Proper Noun",
+                "alternate_meaning": [
+                    "Military force",
+                    "Armed services"
+                ],
+                "synonyms": [
+                    "Austrian Military",
+                    "Austrian Armed Forces"
+                ]
+            }
+        },
+        {
+            "keyword": "Lithuanian Paralympic Committee",
+            "definition": {
+                "definition": "Founded in 1990, the Lithuanian Paralympic Committee promotes Paralympic sports and inclusivity in Lithuania.",
+                "example": "The committee plays a vital role in championing Paralympic sports in Lithuania.",
+                "pos_tag": "Proper Noun",
+                "alternate_meaning": [
+                    "Sports organization",
+                    "Paralympic body"
+                ],
+                "synonyms": [
+                    "LPC",
+                    "Lithuanian Sports Committee"
+                ]
+            }
+        },
+        {
+            "keyword": "International Paralympic Committee",
+            "definition": {
+                "definition": "The IPC is key in advocacy for global Paralympic participation, recognized for increasing awareness and opportunities for athletes with disabilities.",
+                "example": "The IPC has been instrumental in increasing global awareness of Paralympic sports.",
+                "pos_tag": "Proper Noun",
+                "alternate_meaning": [
+                    "Paralympic Federation",
+                    "Global Paralympic Body"
+                ],
+                "synonyms": [
+                    "IPC",
+                    "Paralympic Organization"
+                ]
+            }
+        },
+        {
+            "keyword": "GUI",
+            "definition": {
+                "definition": "Graphical User Interfaces (GUI) revolutionized user interaction with computers, stemming from innovations such as those from Xerox PARC.",
+                "example": "The development of GUI has revolutionized human-computer interaction.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [
+                    "User Interface",
+                    "Software Interface"
+                ],
+                "synonyms": [
+                    "Graphical Interface",
+                    "Visual Interface"
+                ]
+            }
+        },
+        {
+            "keyword": "Vertical Market",
+            "definition": {
+                "definition": "Vertical markets focus on specialized industries, increasingly emphasizing digital transformation in tailored customer solutions.",
+                "example": "In today\u2019s economy, vertical markets emphasize digital transformation.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [
+                    "Industry segment",
+                    "Niche market"
+                ],
+                "synonyms": [
+                    "Specialized Market",
+                    "Industry Vertical"
+                ]
+            }
+        }
+    ],
+    [
+        {
+            "keyword": "Automated Teller Machine (ATM)",
+            "defination": {
+                "defination": "A machine that allows bank customers to perform financial transactions, such as deposits, withdrawals, and checking account balances, without the need for a human teller.",
+                "example": "ATMs are commonly found outside banks and at high-traffic areas like shopping malls.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [],
+                "synonyms": [
+                    "Cash machine",
+                    "Banking terminal"
+                ]
+            }
+        },
+        {
+            "keyword": "Point of Sale (POS)",
+            "defination": {
+                "defination": "A system used at retail locations to process sales transactions, which can also manage inventory and customer relationships.",
+                "example": "POS systems at restaurants allow waitstaff to enter orders and process payments.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [],
+                "synonyms": [
+                    "Checkout system",
+                    "Cash register"
+                ]
+            }
+        },
+        {
+            "keyword": "Self-Service Checkout",
+            "defination": {
+                "defination": "Checkout lanes in stores where customers can scan, bag, and pay for their own purchases without a cashier.",
+                "example": "Many grocery stores offer self-service checkouts to reduce wait times.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [],
+                "synonyms": [
+                    "Express checkout",
+                    "Self-checkout"
+                ]
+            }
+        },
+        {
+            "keyword": "Real-Time Operating System (RTOS)",
+            "defination": {
+                "defination": "An operating system intended to serve real-time applications that ensure predictable task execution within a strict time constraint.",
+                "example": "RTOS is used in embedded systems like automotive controls or industrial robots.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [],
+                "synonyms": [
+                    "Embedded operating system",
+                    "Realtime OS"
+                ]
+            }
+        },
+        {
+            "keyword": "Information Kiosk",
+            "defination": {
+                "defination": "A standalone terminal providing information and applications for communication, commerce, entertainment, and education purposes.",
+                "example": "Information kiosks in museums provide visitor details and exhibit information.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [],
+                "synonyms": [
+                    "Public terminal",
+                    "Interactive kiosk"
+                ]
+            }
+        },
+        {
+            "keyword": "Graphical User Interface (GUI)",
+            "defination": {
+                "defination": "A user interface that includes graphical elements, such as windows, icons, and buttons, to facilitate interaction with electronic devices.",
+                "example": "GUIs are used in operating systems like Windows and macOS to provide intuitive user experiences.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [],
+                "synonyms": [
+                    "Interface",
+                    "User interface"
+                ]
+            }
+        }
+    ]
+]
