@@ -1,0 +1,74 @@
+[
+    [
+        {
+            "keyword": "French artistic gymnastics",
+            "defination": {
+                "defination": "A discipline of gymnastics focusing on performance on vault, bars, beam, and floor routines, characterized by artistic display and technical precision.",
+                "example": "The French artistic gymnastics team performed exceptionally well at the recent championships, particularly in the beam and floor routines.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [
+                    "Artistic Gymnastics"
+                ],
+                "synonyms": [
+                    "French Gymnastics"
+                ]
+            }
+        },
+        {
+            "keyword": "InsideAR",
+            "defination": {
+                "defination": "Once the largest Augmented Reality event in Europe, organized by metaio GmbH, showcasing advancements in AR technology.",
+                "example": "InsideAR was a pivotal event for augmented reality enthusiasts and professionals, fostering innovation and collaboration.",
+                "pos_tag": "Proper Noun",
+                "alternate_meaning": [
+                    "Augmented Reality Conference"
+                ],
+                "synonyms": []
+            }
+        },
+        {
+            "keyword": "Fearing Mind",
+            "defination": {
+                "defination": "An American horror television series that delves into imagined terrifying scenarios of a writer named Bill Fearing.",
+                "example": "The Fearing Mind captivated audiences with its thrilling episodes, depicting the dark narratives imagined by writer Bill Fearing.",
+                "pos_tag": "Proper Noun",
+                "alternate_meaning": [],
+                "synonyms": []
+            }
+        },
+        {
+            "keyword": "Bill Fearing",
+            "defination": {
+                "defination": "A fictional character, known as a writer of suspense thrillers who draws inspiration from his family life.",
+                "example": "Bill Fearing's ability to weave family events into suspenseful plot twists intrigued viewers of the show.",
+                "pos_tag": "Proper Noun",
+                "alternate_meaning": [],
+                "synonyms": []
+            }
+        },
+        {
+            "keyword": "Augmented Reality",
+            "defination": {
+                "defination": "A technology integrating digital visual elements into a real-world environment, enhancing user interaction.",
+                "example": "Augmented Reality is used in various fields, including in popular mobile games like Pok\u00e9mon GO.",
+                "pos_tag": "Noun",
+                "alternate_meaning": [
+                    "AR"
+                ],
+                "synonyms": [
+                    "Mixed Reality"
+                ]
+            }
+        },
+        {
+            "keyword": "metaio GmbH",
+            "defination": {
+                "defination": "A company known for developing augmented reality solutions and organizing the InsideAR conference.",
+                "example": "Before being acquired by Apple, metaio GmbH was a leader in the AR industry, pushing the boundaries of immersive technology.",
+                "pos_tag": "Proper Noun",
+                "alternate_meaning": [],
+                "synonyms": []
+            }
+        }
+    ]
+]
