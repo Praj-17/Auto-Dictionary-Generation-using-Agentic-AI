@@ -1,0 +1,37 @@
+keyword_task:
+  description: >
+    1. Observe the given context very carefully
+    2. Identify important keyword and terminolgies from a student perspective
+    3. Ensure there is no semantic or syntatic redundancy in the keywords
+    4. The keywords should be precise and concise and only the most important keywords should be extracted. 
+
+    Context: {context}
+  expected_output: >
+    A Comprehensive list of dictionaries with keyword and defination with  and terminlogies as a json
+  agent: keyword_researcher
+
+research_task:
+  description: >
+    1. Observe the given keywords extracted from the context and research about them on the internet
+    2. Draft a standard defination and an example for each of the keywords
+    3. Ensure there is no semantic or syntatic redundancy in the keywords
+
+    Context: {context}
+  expected_output: >
+    A Comprehensive list of keywords and their respetive definations and examples in a structured Json format
+  agent: keyword_extractor
+  async_execution: True
+
+critique_task:
+    description: >
+      Review the output of the previous task and suggest improvements.
+    expected_output: >
+      A detailed critique with specific suggestions for improvement
+    agent: critic_agent
+
+improvement_task:
+    description: >
+      Implement the improvements suggested by the critic.
+    expected_output: >
+      Improved version of the original work in a structured Json
+    agent: keyword_extractor
