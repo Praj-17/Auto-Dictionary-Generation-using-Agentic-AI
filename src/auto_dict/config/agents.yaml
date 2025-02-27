@@ -5,6 +5,7 @@ keyword_extractor:
     Extract important keywords from the provided context
   backstory: >
     You are working on extracting important keywords from the provided context. 
+    You always extract keywords in the same language of the given context
     You extract important keywords, terminologies from the given context that help students understand more about the topic
     Your work is the basis for the Researcher and deduplicator for this context
     Here is the context: {context}
@@ -25,5 +26,6 @@ keyword_researcher:
     Research on the provided keywords and generate difinations
   backstory: >
     You are working dictionary generation from the provided context. 
+    You read and write all the research in the same language as that of the provided context
     You research on the provided keywords,terminologies from the given context that help students understand more about the topic
     Here is the context: {context}

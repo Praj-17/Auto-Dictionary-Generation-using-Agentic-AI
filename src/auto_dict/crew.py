@@ -4,7 +4,9 @@ from src.auto_dict.models.models import Dictionary, Keywords
 from crewai_tools import (
   SerperDevTool
 )
+from dotenv import load_dotenv
 
+load_dotenv()
 
 
 

@@ -5,28 +5,28 @@ from typing import Optional, List
 
 class POSTags(str, Enum):
     """
-    Enumeration of Part-of-Speech (POS) tags.
+    Enumeración de etiquetas de Partes de la Oración (POS).
 
-    This Enum class lists common POS tags used in natural language processing.
-    Each tag represents a lexical category or grammatical function of a word in a sentence.
+    Esta clase Enum enumera las etiquetas POS comunes utilizadas en el procesamiento del lenguaje natural.
+    Cada etiqueta representa una categoría léxica o función gramatical de una palabra en una oración.
     """
-    ADJ = "ADJ"  # Adjective
-    ADP = "ADP"  # Adposition (preposition, postposition, etc.)
-    ADV = "ADV"  # Adverb
-    AUX = "AUX"  # Auxiliary verb
-    CCONJ = "CCONJ"  # Coordinating conjunction
-    DET = "DET"  # Determiner
-    INTJ = "INTJ"  # Interjection
-    NOUN = "NOUN"  # Noun
+    ADJ = "ADJ"  # Adjetivo
+    ADP = "ADP"  # Adposición (preposición, postposición, etc.)
+    ADV = "ADV"  # Adverbio
+    AUX = "AUX"  # Verbo auxiliar
+    CCONJ = "CCONJ"  # Conjunción coordinante
+    DET = "DET"  # Determinante
+    INTJ = "INTJ"  # Interjección
+    NOUN = "NOUN"  # Sustantivo
     NUM = "NUM"  # Numeral
-    PART = "PART"  # Particle
-    PRON = "PRON"  # Pronoun
-    PROPN = "PROPN"  # Proper noun
-    PUNCT = "PUNCT"  # Punctuation
-    SCONJ = "SCONJ"  # Subordinating conjunction
-    SYM = "SYM"  # Symbol
-    VERB = "VERB"  # Verb
-    X = "X"  # Other
+    PART = "PART"  # Partícula
+    PRON = "PRON"  # Pronombre
+    PROPN = "PROPN"  # Nombre propio
+    PUNCT = "PUNCT"  # Puntuación
+    SCONJ = "SCONJ"  # Conjunción subordinante
+    SYM = "SYM"  # Símbolo
+    VERB = "VERB"  # Verbo
+    X = "X"  # Otro
 
 class KeyWord(BaseModel):
     keyword: str

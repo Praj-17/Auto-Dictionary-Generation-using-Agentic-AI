@@ -4,6 +4,7 @@ keyword_task:
     2. Identify important keyword and terminolgies from a student perspective
     3. Ensure there is no semantic or syntatic redundancy in the keywords
     4. The keywords should be precise and concise and only the most important keywords should be extracted. 
+    5. Ensure the keywords are in the same language as that of input context.
 
     Context: {context}
   expected_output: >
@@ -17,10 +18,11 @@ research_task:
     3 Find out the right POS TAG for the keyword
     4. Search the internet for any alternate meanings and synonyms of the keyword - 
     5. Ensure there is no semantic or syntatic redundancy in the keywords
+    6. Ensure the keywords are in the same language as that of input context.
 
     Context: {context}
   expected_output: >
-    A Comprehensive list of keywords and their respetive definations and examples in a structured Json format
+    A Comprehensive list of keywords and their respetive definations and examples in a structured Json format in the same language as the context
   agent: keyword_extractor
   async_execution: True
 
