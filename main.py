@@ -3,8 +3,11 @@ import sys
 import warnings
 
 from datetime import datetime
+from src.auto_dict.utils.to_pydantic import TextToPydanticConverter
 
 from src.auto_dict.crew import AutoDict
+from src.auto_dict.utils.split_text import clean_text
+from src.auto_dict.models.models import Dictionary
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 from src.auto_dict.utils.split_text import chunk_text
@@ -15,6 +18,8 @@ import asyncio
 # crew locally, so refrain from adding unnecessary logic into this file.
 # Replace with inputs you want to test with, it will automatically
 # interpolate any tasks and agents information
+
+to_pydantic = TextToPydanticConverter()
 
 def run():
     """
@@ -30,51 +35,65 @@ def run():
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
-async def run_long(text):
+async def run_long(text, max_retries=5):
     """
-    Processes a long text by splitting it into chunks, then processing each chunk asynchronously.
-    If any result fails during JSON decoding, the corresponding input is reprocessed until successful.
+    Processes a long text by splitting it into chunks and processing each chunk asynchronously.
+    Each chunk is retried (up to max_retries) if processing fails.
     
     Parameters:
         text (str): The long text to process.
+        max_retries (int): Maximum number of retries per chunk.
         
     Returns:
-        List: A list containing the 'keywords' extracted from each successfully processed chunk.
+        str: A markdown string containing the aggregated markdown strings from each successfully processed chunk.
     """
-    # Split the text into chunks
+    # Split the text into chunks and initialize each input with a retry count
     chunks = chunk_text(text)
-    # Create the list of inputs
-    inputs = [{"context": context} for context in chunks]
+    inputs = [{"context": chunk, "retry_count": 5} for chunk in chunks]
     
-    final_keywords = []  # Will accumulate successfully processed keywords
+    final_markdown = []  # Accumulates raw markdown strings from each successful processing
     pending_inputs = inputs
     iteration = 0
+    converted_json = []
 
     while pending_inputs:
         iteration += 1
         print(f"Iteration {iteration}: Processing {len(pending_inputs)} input(s).")
+        
         try:
+            # Assume each result is a JSON dict with a "raw" key containing a markdown string
             results = await AutoDict().crew().kickoff_for_each_async(inputs=pending_inputs)
         except Exception as e:
             raise Exception(f"An error occurred while running the crew: {e}")
 
         next_pending_inputs = []
-        # Process each result along with its original input
+        # Process each result with its corresponding input
         for input_dict, result in zip(pending_inputs, results):
-            ans = result.model_dump()
             try:
-                data = json.loads(ans['raw'])
-                # Append the successfully decoded keywords
-                final_keywords.append(data['keywords'])
+                print(f"Result: {result.model_dump()['raw']}")
+                # Append the raw markdown string from the "raw" key in the JSON dict
+                final_markdown.append(result.model_dump()['raw'])
             except Exception as e:
-                # Collect the input that failed for a retry in the next iteration
-                next_pending_inputs.append(input_dict)
+                # Increment retry count and add back if below max_retries
+                input_dict["retry_count"] += 1
+                if input_dict["retry_count"] < max_retries:
+                    next_pending_inputs.append(input_dict)
+                else:
+                    print(f"Max retries reached for input with context: {input_dict['context'][:30]}...")
         
         if next_pending_inputs:
-            print(f"{len(next_pending_inputs)} input(s) failed JSON decoding. Reprocessing them.")
+            print(f"{len(next_pending_inputs)} input(s) failed processing. Reprocessing them.")
         pending_inputs = next_pending_inputs
 
-    return final_keywords
+        try:
+            # convert to json 
+            converted_json = to_pydantic.convert(text_sample="\n".join(final_markdown), model_class=Dictionary)
+            print("Converted to json")
+        except Exception as e:
+            raise Exception(f"An error occurred while converting to json: {e}")
+
+
+    return converted_json
 
 def train():
     """
@@ -124,28 +143,6 @@ if __name__ == '__main__':
 
     text = """Artículo de investigación
 
- 
-
-Aceite esencial de Arazá (Eugenia stipitata McVaugh) con actividad antibacteriana
-
-Essential oil of Arazá (Eugenia stipitata McVaugh) with antibacterial activity
-
- 
-
-Jenny Rosalyn Huerta León1 https://orcid.org/0000-0003-4744-7830
-Jhonnel Williams Samaniego Joaquin1* https://orcid.org/0000-0002-0033-7119
-Carolina Muñoz Cordero1 https://orcid.org/0000-0003-1862-4789
-Sonia Tenorio Huamaní1 https://orcid.org/0000-0003-2971-005X
-
- 
-
-1Universidad "María Auxiliadora". Lima, Perú.
-
-*Autor para la correspondencia. Correo electrónico: jhonnel.samaniego@uma.edu.pe
-
- 
-
- 
 
 RESUMEN
 
@@ -158,178 +155,20 @@ Conclusiones: El aceite esencial de las hojas de Eugenia stipitata McVaugh prese
 Palabras clave: aceites volátiles; antibacterianos; Escherichia coli; Salmonella entérica; Staphylococcus aureus.
 
 ABSTRACT
+."""
 
-Introduction: Peru is one of the countries with the greatest biodiversity in botanical species, some with known medicinal properties.
-Objective: To determine the antibacterial effect of the essential oil of Eugenia stipitata McVaugh leaves against Staphylococcus aureus ATCC 25923, Escherichia coli ATCC 25922 and Salmonella enterica sv Enteritidis ATCC 13076.
-Methods: Basic study with a quantitative and experimental approach. Plants came from the district of Belén, city of Iquitos, Department of Loreto. The technique for the extraction of the essential oil was steam dragging and the microbiological technique to determine the antimicrobial effect was Kirby Bauer's technique. The samples were worked in 4 concentrations 100, 75, 50 and 25% and a negative control only with dimethyl sulfoxide, using 5 replicates for each sample.
-Results: The sample at 100% concentration had antibacterial activity against Staphylococcus aureus. The activity of the assay against Escherichia coli proved to be effective in all the samples, however, it was observed that the inhibition halos of greater diameter were manifested in the samples at 100 % and 75 %. In addition, antibacterial activity was evidenced at concentrations of 100%, 75% and 50% against Salmonella enterica sv Enteritidis.
-Conclusions: The essential oil of Eugenia stipitata McVaugh leaves has an antibacterial effect against Staphylococcus aureus, Escherichia coli and Salmonella enterica sv Enteritidis.
+    output = asyncio.run(run_long(clean_text(text)))
+    print(output)
+    
+    if isinstance(output, dict):
+        with open("src/outputs/output_spanish.json", "w") as f:
+            json.dump(output, f, indent=4)
+    elif isinstance(output, str):
+        with open("src/outputs/output_spanish.md", "w") as f:
+            f.write(f"# Keywords Extracted\n \n {output}")
 
-Keywords: volatile oils; antibacterial;Escherichia coli; Salmonella enterica; Staphylococcus aureus.
 
- 
 
- 
-
-Recibido: 13/06/2023
-Aprobado: 06/12/2023
-
- 
-
-
-INTRODUCCIÓN
-
-El uso de sustancias naturales en el tratamiento de enfermedades, en las que se incluyen infecciones, es un desafío en la medicina moderna. Más del 80 % de la población mundial las utiliza para prevenir y combatir diversas afecciones. Este porcentaje coexiste con el uso indiscriminado de fármacos sintéticos, además, la resistencia microbiana, riesgo adicional para la salud.(1)
-
-El Perú es uno de los 12 países más biodiversos del mundo; posee más de 30 mil especies botánicas,(2) algunas con propiedades medicinales establecidas y otras, sin suficiente respaldo científico para su uso como alternativa terapéutica en enfermedades infecciosas, incluidas las transmitidas por alimentos (ETAS).
-
-Las ETAS, en el Perú, todavía persisten con índices de prevalencia elevados. Son provocadas por la ingestión de alimentos contaminados por microorganismos o sustancias químicas. Representan una importante carga de mortalidad y morbilidad dentro de los sistemas de salud pública de las naciones.(3) En el mundo son consideradas un problema de salud pública. Son la principal causa de mortalidad en infantes menores de 5 años en países en vías de desarrollo.(4)
-
-Dada la gravedad de esta situación es imperativo buscar soluciones efectivas y sostenibles para combatir estas enfermedades. Una estrategia prometedora es el estudio de propiedades antibacterianas en plantas autóctonas; este podría ofrecer alternativas naturales y efectivas contra patógenos transmitidos por alimentos. Entre las pocas investigaciones destacadas en esta línea se encuentra el caso de Eugenia stipitata McVaugh, conocida localmente como "arazá".(5,6)
-
-Eugenia stipitata McVaugh (arazá) es un árbol de 12-15 m de altura con disperso follaje, de flores y ramas con abundante pubosidad. Es originaria de la región amazónica occidental entre los ríos Ucayali y Marañón y existen en estado silvestre en numerosas zonas del departamento de Loreto, donde puede alcanzar hasta 10 metros de altura.(7,8) La especie Eugenia stipitata McVaugh, perteneciente a la familia Myrtaceae, posee una composición química diversa. Los componentes principales del aceite esencial incluyen fenoles y compuestos terpénicos.(6) Estas sustancias se localizan en diversas partes de la planta, tales como hojas, raíces, semillas, tallo, flores y frutos.(9,10)
-
-Las enfermedades transmitidas por los alimentos (ETAs) son el resultado de la ingestión de alimentos o agua contaminados, son provocadas por diversos microorganismos. Entre estos agentes patógenos se destacan bacterias como Salmonella, Escherichia coli y Staphylococcus aureus. Estos microorganismos son responsables de toxiinfecciones e infecciones alimentarias, lo que las convierte en una causa significativa de morbilidad y mortalidad mundial. La presencia de estos patógenos ha llevado a la implementación de diversos procedimientos para estudiar y combatir su propagación. Entre estas medidas se incluye la utilización de métodos como la obtención de aceites mediante destilación por arrastre de vapor de agua.(11,12,13)
-
-Las plantas ofrecen una amplia gama de beneficios curativos pues incluyen efectos antibacterianos y antiinflamatorios contra patógenos como Salmonella, Escherichia coli y Staphylococcus aureus. A través de la investigación se busca respaldar y validar el uso de estos tratamientos naturales que ofrecen alternativas seguras y eficaces para mejorar la salud.(14)
-
-El objetivo de la investigación es evaluar la actividad antibacteriana in vitro del aceite esencial de las hojas de Eugenia stipitata McVaugh (arazá) frente a Staphylococcus aureus, Escherichia coli y Salmonella entérica sv Enteritidis.
-
- 
-
- 
-
-MÉTODOS
-
-El estudio de tipo experimental se llevó a cabo en los laboratorios de la Universidad María Auxiliadora, en Perú, durante los meses comprendidos entre julio del 2019 y abril del 2020. Se enmarca en la investigación básica con un enfoque cuantitativo.(15)
-
-La planta estudiada fue Eugenia stipitata McVaugh (arazá) proveniente del barrio de Belén, distrito de Belén, en la ciudad de Iquitos, Departamento de Loreto.
-
-En cuanto a los microorganismos, se trabajó con bacterias de Staphylococcus aureus (ATCC 26923), Escherichia coli (ATCC 25922) y Salmonella entérica sv Enteritidis (ATCC 13076). Se realizaron 30 siembras y se repartieron en grupos de n= 5 placas para cada microorganismo.
-
-Este cálculo se derivó de la combinación de 3 bacterias (Staphylococcus aureus, Escherichia coli y Salmonella enterica sv Enteritidis) con 4 concentraciones diferentes del aceite esencial (100 %, 75 %, 50 % y 25 %), y cada combinación fue repetida 5 veces. Cada combinación única se sembró en una placa distinta.
-
-Como control negativo se utilizó dimetilsulfóxido y para el control positivo una solución de clorhexidina al 0,12 %. Se realizaron 5 repeticiones por cada muestra analizada.
-
-La variable independiente fue la concentración de aceite esencial obtenido de las hojas de Eugenia stipitata McVaugh (arazá); la concentración utilizada corresponde al 100 %, 75 %, 50 % y 25 %.
-
-La variable dependiente fue el efecto antimicrobiano determinado frente a Staphylococcus aureus (ATCC 26923), Escherichia coli (ATCC 25922) y Salmonella entérica sv Enteritidis (ATCC 13076).
-
-Procedimientos
-
-Para la obtención del aceite esencial de las hojas de Eugenia stipitata McVaugh (arazá) se utilizaron 8020 g de hojas; que fueron limpiadas, lavadas y seleccionas de manera que estuvieran en óptimas condiciones. Se secaron en el medio ambiente, en sombra, por 2 días, a una temperatura oscilante entre 25 °C y 30 °C. Luego se realizó la identificación taxonómica del recurso vegetal en el Herbario del Museo de Historia Natural de la Universidad Nacional Mayor de San Marcos, constancia N° 154-USM-2022.
-
-La extracción del aceite esencial se realizó por el método de hidrodestilación con temperatura y presión controlada, por 6 horas. Luego se destiló el aceite esencial y se separó en una pera de decantación, para enseguida ser deshidratado, adicionando sulfato de sodio anhidro, en cantidad de 1 g por cada mL de aceite.(16)
-
-Para cuantificar el diámetro de los halos de inhibición se utilizó como medio de cultivo el agar Müller Hinton (Merck). Se prepararon las muestras con el aceite esencial diluido con dimetilsulfóxido, para la obtención de 4 concentraciones, al 100 %, 75 %, 50 % y el 25 %. Se sembraron 5 placas por muestra.
-
-El método utilizado fue el de difusión con discos. Se humedeció el hisopo de algodón en inóculos homogenizados al 0,5 de la escala McFarland y se sembraron en 3 direcciones, para obtener una completa y homogénea distribución de la muestra, y luego dejar solidificar por 10 minutos. Los discos de papel fueron embebidos con 20 µL de las muestras al 100 %, 75 %, 50 % y un 25 % de aceite esencial, un control negativo con dimetilsulfóxido sin aceite esencial y un control positivo de clorhexidina al 0,12 %.
-
-Luego las placas fueron incubadas a 37 °C por 24 horas. Después de la incubación se procedió a medir los halos de inhibición usando un calibrador electrónico digital. Para evaluar el tamaño de las zonas de inhibición se determinó el promedio aritmético de las mediciones y la desviación estándar.
-
-La investigación fue aprobada por el Comité de Ética de la Universidad María Auxiliadora, constancia N°008-2022.
-
- 
-
- 
-
-RESULTADOS
-
-La tabla 1 muestra que únicamente la concentración al 100 % del aceite esencial de Eugenia stipitata McVaugh (arazá) presenta un efecto antibacteriano contra Staphylococcus aureus ATCC 25923. Las demás concentraciones, así como el control negativo, no evidencian dicho efecto.
-
-La tabla 2 muestra que el aceite esencial de Eugenia stipitata McVaugh (arazá) exhibe actividad antimicrobiana a concentraciones del 100 % y 75 % contra Escherichia coli ATCC 25922. Sin embargo, esta actividad se reduce notablemente en las concentraciones del 50 % y 25 %.
-
-La tabla 3 revela que el aceite esencial de Eugenia stipitata McVaugh (arazá) manifiesta su máxima actividad antimicrobiana a una concentración del 100 %. Sin embargo, esta actividad decrece con concentraciones del 75 % y es aún menor al 50 % contra Salmonella enterica sv Enteritidis ATCC 13076.
-
- 
-
- 
-
-DISCUSIÓN
-
-La evaluación de la actividad antibacteriana del aceite esencial de Eugenia stipitata McVaugh (arazá) demostró un efecto inhibitorio en las 3 mayores concentraciones contra Escherichia coli ATCC 25922. Sin embargo, esto contrasta con el estudio de Bastos y otros,(17) que utilizaron extractos hidroetanólicos de Eugenia florida en concentraciones que variaron de 1000 a 1,95 µg/mL. Su concentración mínima inhibitoria fue de 1000 µg/mL para Escherichia coli, sugieren que el extracto alcohólico tiene una mayor actividad antibacteriana que el aceite esencial, tal vez debido al efecto antimicrobiano intrínseco del metanol.
-
-Además, el aceite esencial de Eugenia stipitata McVaugh (arazá) mostró un efecto inhibitorio contra Salmonella enterica sv Enteritidis ATCC 13076 en las 2 concentraciones más altas. Esta observación es diferente a la de Becker N y otros,(18) quienes estudiaron la concentración mínima inhibitoria del aceite esencial de Eugenia uniflora (L.) contra Salmonella thyphimurium, y encontraron efectividad desde la concentración más baja.
-
-Las diferencias notadas entre este estudio y los anteriores podrían atribuirse a varias razones: primero, aunque se trabajó con plantas de la misma familia taxonómica, la composición química puede variar significativamente entre especies, e influenciar la actividad antibacteriana. Además, el método de extracción y los solventes utilizados pueden alterar las propiedades antimicrobianas del extracto o aceite esencial. La nula actividad antibacteriana en ciertas concentraciones, comparada con el control positivo, podría estar relacionada con la potencia intrínseca del compuesto activo en el aceite esencial y su concentración crítica para ejercer un efecto antibacteriano.
-
-El estudio presenta ciertas limitaciones, una de ellas el uso exclusivo de la hidrodestilación para extraer el aceite esencial. Es importante destacar que la elección de este método puede influir en las propiedades y composiciones del aceite obtenido, limita así la generalización de los resultados a otras formas de extracción. Además, existen otras posibles limitaciones, como la variabilidad en las condiciones de laboratorio, las cepas bacterianas utilizadas y las metodologías específicas empleadas. Estas discrepancias entre el enfoque del presente estudio e investigaciones anteriores podrían dificultar las comparaciones directas, lo cual enfatiza la importancia de buscar y referenciar otros trabajos que utilicen métodos de extracción similares para garantizar la compatibilidad de los resultados. Se opta por la hidrodestilación para extraer el aceite esencial, aunque otros métodos podrían generar aceites con composiciones y eficacias antimicrobianas distintas.
-
-En este caso se observó que Staphylococcus aureus es sensible al aceite esencial a la concentración del 100 %, mientras que Escherichia coli mostró sensibilidad a las concentraciones de 100 %, 75 % y el 50 %. La extensión de la zona de inhibición generalmente se correlaciona con la sensibilidad: cuanto más grande sea la zona, mayor será la sensibilidad del microorganismo al agente antimicrobiano.
-
-Se concluye que el aceite esencial de las hojas de Eugenia stipitata McVaugh presenta efecto antibacteriano frente a Staphylococcus aureus, Escherichia coli y Salmonella enterica sv Enteritidis.
-
- 
-
- 
-
-REFERENCIAS BIBLIOGRÁFICAS
-
-1. Organización Mundial de la Salud. Estrategia de la OMS sobre medicina tradicional 2014-2023. Ginebra: OMS. 2013. [acceso: 20/01/2022]. Disponible en: https://apps.who.int/iris/bitstream/handle/10665/95008/978924350-6098_spa.pdf
-
-2. Ministerio de Salud. Boletín Epidemiológico del Perú 2019. Lima: Centro Nacional de Epidemiología, Prevención y Control de Enfermedades; 2019. [acceso: 05/10/2022]. Disponible en: https://www.dge.gob.pe/portal/docs/vigilancia/boletines/2019/15.pdf
-
-3. Fernández S, Fuentes J, Bu J, Baca Y, Chavez V, Montoya H, et al. Enfermedades transmitidas por alimentos (etas); una alerta para el consumidor. Ciencia Latina Revista Científica Multidisciplinar 2021; 5(2):2284-98. DOI: 10.37811/cl_rcm.v5i2.433
-
-4. Organización Mundial de la Salud. Inocuidad de los alimentos. Ginebra: OMS. 2020 [acceso: 24/11/2023]. Disponible en: https://www.who.int/es/news-room/fact-sheets/detail/food-safety
-
-5. Reyes C, Lanari M. Moisture sorption properties of freeze-dried arazá (Eugenia stipitata Mc Vaugh) powder: Effect on physicochemical and thermodynamic properties. Journal of Berry Research. 2020 [acceso: 25/04/2023]; 10(2):259-78. Disponible en: https://ri.conicet.gov.ar/handle/11336/126926
-
-6. Cuellar F, Ariza E, Anzola C, Restrepo P. Estudio de la capacidad Antioxidante del Arazá (Eugenia stipitata McVaug) durante la maduración. Rev Colom Quim. 2013 [acceso: 05/10/2022]; 42(2): 21-28. Disponible en: http://www.scielo.org.co/scielo.php?pid=S0120-28042013000200003&script=sci_abstract&tlng=es
-
-7. Balcázar C, Castro E, Medina M, Muñoz L, Torrejón L, Rodríguez R, et al. Physical and Chemical Properties of 70% Cocoa Dark Chocolate Mixed with Freeze-Dried Arazá (Eugenia stipitata) Pulp. Prev Nutr Food Sci. 2022; 27(4):474-482. DOI: 10.3746/pnf.2022.27.4.474
-
-8. Reyes C, Lanari M. Storage stability of freeze-dried arazá (Eugenia stipitata Mc Vaugh) powders. Implications of carrier type and glass trnsition. LWT. 2020; 118:2-8. DOI: 10.1016/j.lwt.2019.108842
-
-9. Llerena W, Samaniego I, Navarro M, Ortíz J, Angós I, Carrillo W. Effect of modified atmosphere packaging (MAP) in the antioxidant capacity of arazá (Eugenia stipitata McVaugh), naranjilla (Solanum quitoense Lam.), and tree tomato (Solanum betaceum Cav.) fruits from Ecuador. Journal of Food Processing & Preservation. 2020; 44(10):1-11. DOI: 10.1111/jfpp.14757
-
-10. Butnariu M, Sarac I. Essential Oils from Plants. Journal of Biotechnology and Biomedical Science. 2018; 1(4): 35-43. DOI: 10.14302/issn.2576-6694.jbbs-18-2489
-
-11. Kumar B, Smita K, Debut A, Cumbal L. Extracellular green synthesis of silver nanoparticles using Amazonian fruit Araza (Eugenia stipitata McVaugh). Transactions of Nonferrous Metals Society of China. 2016; 26(9):2363-71. DOI: 10.1016/s1003-6326(16)64359-5
-
-12. Palpan A, Munayco C. La Vigilancia De Los Eventos Sanitarios a Través De Los Medios De Comunicación en Perú. Revista Peruana de Medicina Experimental y Salud Pública. 2017; 34(3):395-403. DOI: 10.17843/rpmesp.2017.343.2879
-
-13. FDA. Los 14 patógenos principales transmitidos por los alimentos. US Food & Drug. 2018. [acceso: 05/10/2022]. Disponible en: https://www.fda.gov/food/people-risk-foodborne-illness/los-14-patogenos-principales-transmitidos-por-los-alimentos-de-seguridad-alimentaria-para-futuras
-
-14. OMS. Situación de las Plantas Medicinales en Perú. Washington: OPS; 2018. [acceso: 05/10/2022]. Disponible en: https://iris.paho.org/bitstream/handle/10665.2/50479/OPSPER19-001_spa.pdf?sequence=1&isAllowed=y
-
-15. Carrasco Díaz S. Metodología de la Investigación Científica: pautas metodológicas para diseñar y elaborar el proyecto de investigación. 2da edición Lima-Perú: Editorial San Marcos, 2013.
-
-16. Bonilla D, Mendoza Y, Moncada C, Murcia O, Murcia Á, Calle J, et al. Efecto del aceite esencial de rosmarinus officinalis sobre porphyromonas gingivalis cultivada in vitro. Rev Colombiana de Ciencias Químico Farmacéuticas 2016; 45(2):275. DOI: 10.15446/rcciquifa.v45n2.59942
-
-17. Bastos R, Rosa C, Josidel O, Silva N, Días, A, Rocha C, et al. Chemical characterization and antimicrobial activity of hydroethanolic crude extract of Eugenia florida DC (Myrtaceae) leaves. Int J Pharm Pharm Sci 2016 [acceso: 05/10/2022]; 8(6):110-115. Disponible en: https://www.researchgate.net/publication/304887047_Chemical-_characterization_and_antimicrobial_activity_of_hydroethanolic_-crude_extract_of_Eugenia_florida_DC_Myrtaceae_leaves
-
-18. Becker N, Volcao L, Camargo T, Freitag R, Ribeiro G. Biological Properties of Eugenia uniflora L. Essential Oil: Chemical Composition and Antimicrobial Activity. Vittalle - Revista de Ciências da Saúde. 2017; 29(1): 2-30. DOI: 10.14295/vittalle.v29i1.6267
-
- 
-
- 
-
-Conflictos de interés
-
-Los autores declaran que no poseen conflicto de intereses en el trabajo que se presenta.
-
- 
-
-Contribuciones de los autores
-
-Conceptualización: Carolina Muñoz Cordero, Sonia Tenorio Huamaní, Jenny Huerta León, Jhonnel Samaniego Joaquin.
-Curación de datos: Jenny Huerta León, Jhonnel Samaniego Joaquin.
-Análisis formal: Sonia Tenorio Huamaní, Jenny Huerta León, Jhonnel Samaniego Joaquin.
-Investigación: Carolina Muñoz Cordero, Sonia Tenorio Huamaní, Jenny Huerta León, Jhonnel Samaniego Joaquin.
-Metodología: Jenny Huerta León.
-Administración del proyecto: Jenny Huerta León.
-Recursos materiales: Carolina Muñoz Cordero, Sonia Tenorio Huamaní.
-Supervisión: Sonia Tenorio Huamaní.
-Validación: Jhonnel Samaniego Joaquin.
-Visualización: Jenny Huerta León, Jhonnel Samaniego Joaquin.
-Redacción: -borrador original: Jenny Huerta León, Jhonnel Samaniego Joaquin.
-Redacción-revisión y edición: Jenny Huerta León, Jhonnel Samaniego Joaquin."""
-
-    output = asyncio.run(run_long(text))
-
-    with open("src/outputs/output_spanish.json", "w") as f:
-        json.dump(output, f, indent=4)
 
     
 

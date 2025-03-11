@@ -1,6 +1,6 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from src.auto_dict.models.models import Dictionary, Keywords
+from src.auto_dict.models.models import Dictionary
 from crewai_tools import (
   SerperDevTool
 )
@@ -31,61 +31,57 @@ class AutoDict():
 	def keyword_extractor(self) -> Agent:
 		return Agent(
 			config=self.agents_config['keyword_extractor'],
-			verbose=False, 
-			output_pydantic = Keywords
+			verbose=True
 		)
 
-	@agent
-	def critic_agent(self) -> Agent:
-		return Agent(
-			config=self.agents_config['critic_agent'],
-			verbose=False,
-			output_pydantic = Dictionary
-		)
+	# @agent
+	# def critic_agent(self) -> Agent:
+	# 	return Agent(
+	# 		config=self.agents_config['critic_agent'],
+	# 		verbose=False
+	# 	)
 
 	@agent
 	def keyword_researcher(self) -> Agent:
 		return Agent(
 			config=self.agents_config['keyword_researcher'],
 			verbose=False,
-			output_pydantic = Dictionary,
 			tools=[search_tool]
 			
 		)
 
+	@agent
+	def generate_dictionary_agent(self) -> Agent:
+		return Agent(
+			config=self.agents_config['generate_dictionary_agent'],
+			verbose=True
+			
+		)
 	# To learn more about structured task outputs, 
 	# task dependencies, and task callbacks, check out the documentation:
 	# https://docs.crewai.com/concepts/tasks#overview-of-a-task
 	@task
 	def research_task(self) -> Task:
 		return Task(
-			config=self.tasks_config['research_task'],
-			output_pydantic = Dictionary,
-			tools=[search_tool]
-			
+			config=self.tasks_config['research_task']
 		)
 	
 	@task
 	def keyword_task(self) -> Task:
 		return Task(
 			config=self.tasks_config['keyword_task'],
-			output_pydantic = Keywords
+			verbose=True,
+
 		)
+
 
 
 	@task
-	def critique_task(self) -> Task:
+	def generate_dictionary_task(self) -> Task:
 		return Task(
-			config=self.tasks_config['critique_task'],
+			config=self.tasks_config['generate_dictionary_task'],
+			verbose=True
 		)
-
-	@task
-	def improvement_task(self) -> Task:
-		return Task(
-			config=self.tasks_config['improvement_task'],
-			output_pydantic = Dictionary
-		)
-
 
 	@crew
 	def crew(self) -> Crew:
@@ -98,5 +94,6 @@ class AutoDict():
 			tasks=self.tasks, # Automatically created by the @task decorator
 			process=Process.sequential,
 			verbose=True,
+			planning=True,
 			# process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
 		)

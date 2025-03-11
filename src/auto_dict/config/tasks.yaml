@@ -1,41 +1,86 @@
 keyword_task:
   description: >
-    1. Observe the given context very carefully
-    2. Identify important keyword and terminolgies from a student perspective
-    3. Ensure there is no semantic or syntatic redundancy in the keywords
-    4. The keywords should be precise and concise and only the most important keywords should be extracted. 
-    5. Ensure the keywords are in the same language as that of input context.
+    1. Carefully read the context.
+    2. Identify key terms from a student's perspective.
+    3. Ensure no redundancy in keywords.
+    4. Use concise and precise keywords.
 
-    Context: {context}
+    Here is the context: {context}
+
   expected_output: >
-    A Comprehensive list of dictionaries with keyword and defination with  and terminlogies as a json
-  agent: keyword_researcher
+    A structured list of keywords with definitions.
+
+  agent: keyword_extractor
 
 research_task:
   description: >
-    1. Observe the given keywords extracted from the context and research about them on the internet
-    2. Draft a standard defination and an example for each of the keywords
-    3 Find out the right POS TAG for the keyword
-    4. Search the internet for any alternate meanings and synonyms of the keyword - 
-    5. Ensure there is no semantic or syntatic redundancy in the keywords
-    6. Ensure the keywords are in the same language as that of input context.
+    1. Research the extracted keywords online.
+    2. Define each keyword with an example.
+    3. Determine the correct POS tag.
+    4. Avoid redundancy.
+    5. Keep keywords in the original language.
+    
+    POS Tag should be one of these
 
-    Context: {context}
+    ADJ = "ADJ"  # Adjetivo
+    ADP = "ADP"  # Adposición (preposición, postposición, etc.)
+    ADV = "ADV"  # Adverbio
+    AUX = "AUX"  # Verbo auxiliar
+    CCONJ = "CCONJ"  # Conjunción coordinante
+    DET = "DET"  # Determinante
+    INTJ = "INTJ"  # Interjección
+    NOUN = "NOUN"  # Sustantivo
+    NUM = "NUM"  # Numeral
+    PART = "PART"  # Partícula
+    PRON = "PRON"  # Pronombre
+    PROPN = "PROPN"  # Nombre propio
+    PUNCT = "PUNCT"  # Puntuación
+    SCONJ = "SCONJ"  # Conjunción subordinante
+    SYM = "SYM"  # Símbolo
+    VERB = "VERB"  # Verbo
+    X = "X"  # Otro
+
   expected_output: >
-    A Comprehensive list of keywords and their respetive definations and examples in a structured Json format in the same language as the context
-  agent: keyword_extractor
+    A structured list of keywords with definitions.
+
+  agent: keyword_researcher
   async_execution: True
 
-critique_task:
-    description: >
-      Review the output of the previous task and suggest improvements.
-    expected_output: >
-      A detailed critique with specific suggestions for improvement
-    agent: critic_agent
+generate_dictionary_task:
+  description: >
+    1. Review the keywords and definitions.
+    2. Create a structured dictionary.
+    3. Ensure clarity and original language.
 
-improvement_task:
-    description: >
-      Implement the improvements suggested by the critic.
-    expected_output: >
-      Improved version of the original work in a structured Json
-    agent: keyword_extractor
+  expected_output: >
+    A comprehensive dictionary with keywords and definitions and other metadata in a markdown format.
+    Return only the following format do not return outputs from other agents only use them as reference
+    Number Each keyword and definition pair in a numbered list
+    separate all metadata with new lines
+    
+    **Keyword**: keyword
+    **Definition**: definition
+    **Pos**: POS tag name
+    **Example**: example
+
+    POS Tag should be one of these
+
+    ADJ = "ADJ"  # Adjetivo
+    ADP = "ADP"  # Adposición (preposición, postposición, etc.)
+    ADV = "ADV"  # Adverbio
+    AUX = "AUX"  # Verbo auxiliar
+    CCONJ = "CCONJ"  # Conjunción coordinante
+    DET = "DET"  # Determinante
+    INTJ = "INTJ"  # Interjección
+    NOUN = "NOUN"  # Sustantivo
+    NUM = "NUM"  # Numeral
+    PART = "PART"  # Partícula
+    PRON = "PRON"  # Pronombre
+    PROPN = "PROPN"  # Nombre propio
+    PUNCT = "PUNCT"  # Puntuación
+    SCONJ = "SCONJ"  # Conjunción subordinante
+    SYM = "SYM"  # Símbolo
+    VERB = "VERB"  # Verbo
+    X = "X"  # Otro
+
+  agent: generate_dictionary_agent

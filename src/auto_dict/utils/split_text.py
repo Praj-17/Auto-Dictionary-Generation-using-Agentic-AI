@@ -1,4 +1,5 @@
 from langchain.text_splitter import CharacterTextSplitter
+import string
 
 def count_tokens(text: str) -> int:
     """Counts tokens by splitting the text on whitespace."""
@@ -25,6 +26,12 @@ def chunk_text(text: str, chunk_size: int = 250, chunk_overlap: int = 50):
     return splitter.split_text(text)
 
 # Example usage:
+
+def clean_text(text: str) -> str:
+    # Ensure UTF-8 encoding and replace errors
+    text = text.encode("utf-8", errors="replace").decode("utf-8")
+    # Remove punctuation
+    return text.translate(str.maketrans('', '', string.punctuation))
 if __name__ == '__main__':
     sample_text = (
         "LangChain is a powerful tool for building language model applications. " * 50
