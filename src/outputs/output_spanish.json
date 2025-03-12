@@ -1,74 +1,89 @@
 {
     "entries": [
         {
-            "word": "Antibacterial Effect",
-            "definition": "The ability of Eugenia stipitata McVaugh's essential oil to inhibit the growth of bacteria.",
+            "word": "Antimicrobial stewardship",
+            "definition": "The practice of promoting the responsible use of antimicrobials in clinical and non-clinical settings.",
             "pos": "NOUN"
         },
         {
-            "word": "Eugenia stipitata McVaugh",
-            "definition": "A plant species used in the study, known for its medicinal properties.",
+            "word": "Public health emergency",
+            "definition": "An extraordinary situation requiring immediate attention from public health officials to protect the population.",
             "pos": "NOUN"
         },
         {
-            "word": "Staphylococcus aureus",
-            "definition": "A type of bacteria tested for antibacterial effect.",
+            "word": "Antimicrobial resistance",
+            "definition": "The ability of microorganisms to evade or resist the effects of antimicrobials.",
             "pos": "NOUN"
         },
         {
-            "word": "Escherichia coli (E. coli)",
-            "definition": "Another type of bacteria tested for antibacterial effect.",
+            "word": "Natural antibacterial agent",
+            "definition": "A substance derived from natural sources with demonstrated antimicrobial activity.",
+            "pos": "ADJ"
+        },
+        {
+            "word": "Antimicrobial stewardship",
+            "definition": "A set of strategies aimed at optimizing the use of antimicrobials, reducing resistance, and ensuring patient safety.",
             "pos": "NOUN"
         },
         {
-            "word": "Salmonella enterica sv Enteritidis",
-            "definition": "The third type of bacteria tested for antibacterial effect.",
+            "word": "Antibiotics",
+            "definition": "Substances used to treat bacterial infections by killing or inhibiting the growth of microorganisms.",
             "pos": "NOUN"
         },
         {
-            "word": "Antimicrobial Activity",
-            "definition": "The ability of the essential oil to inhibit the growth of microorganisms.",
+            "word": "Viral infections",
+            "definition": "Infections caused by viruses, not bacteria.",
             "pos": "NOUN"
         },
         {
-            "word": "Volatile Oils",
-            "definition": "Essential oils extracted from plants using various techniques, such as steam distillation.",
+            "word": "Superbugs",
+            "definition": "Bacteria that have developed resistance to multiple antibiotics, posing a significant threat to public health.",
             "pos": "NOUN"
         },
         {
-            "word": "Peru",
-            "definition": "A country with high biodiversity in plant species, some of which have medicinal properties.",
+            "word": "Antimicrobials",
+            "definition": "Substances or agents with activity against microorganisms, including bacteria and fungi.",
+            "pos": "ADJ"
+        },
+        {
+            "word": "Responsible prescribing",
+            "definition": "Prescribing antibiotics only when necessary and using the most effective treatment options.",
+            "pos": "VERB"
+        },
+        {
+            "word": "Misuse",
+            "definition": "The incorrect or unwarranted use of antibiotics in clinical practice or agriculture.",
+            "pos": "VERB"
+        },
+        {
+            "word": "Overuse",
+            "definition": "The excessive or improper use of antibiotics in clinical practice or agriculture.",
+            "pos": "VERB"
+        },
+        {
+            "word": "Antimicrobial stewardship",
+            "definition": "A set of strategies aimed at optimizing the use of antimicrobials, reducing resistance, and ensuring patient safety.",
             "pos": "NOUN"
         },
         {
-            "word": "aceites vol\u00e1tiles",
-            "definition": "Especies de aceites que se evaporan a temperatura ambiente y emiten un olor caracter\u00edstico",
-            "pos": "PUNCT"
-        },
-        {
-            "word": "antibacterianos",
-            "definition": "Propiedades o sustancias que tienen un efecto inhibidor en la crecimiento o actividad de bacterias",
-            "pos": "ADV"
-        },
-        {
-            "word": "Escherichia coli",
-            "definition": "Especie de bacteria que se encuentra com\u00fanmente en el intestino humano y puede causar enfermedades gastrointestinales",
+            "word": "Ongoing research",
+            "definition": "Continuous scientific investigation into new treatments, diagnostics, and strategies for combating antibiotic resistance.",
             "pos": "NOUN"
         },
         {
-            "word": "Salmonella ent\u00e9rica",
-            "definition": "Especie de bacteria que se encuentra en el intestino humano y puede causar enfermedades gastrointestinales",
+            "word": "Infection prevention",
+            "definition": "Measures taken to reduce the risk of infection transmission in healthcare settings.",
             "pos": "NOUN"
         },
         {
-            "word": "Staphylococcus aureus",
-            "definition": "Especie de bacteria que se encuentra com\u00fanmente en la piel y los secretos respiratorios humanos y puede causar enfermedades infecciosas",
-            "pos": "NOUN"
+            "word": "Natural antibacterial agent",
+            "definition": "A substance derived from natural sources with demonstrated antimicrobial activity.",
+            "pos": "ADJ"
         },
         {
-            "word": "Eugenia stipitata McVaugh",
-            "definition": "Especie de planta que se encuentra en el Caribe y tiene propiedades medicinales y arom\u00e1ticas",
-            "pos": "PROPN"
+            "word": "Antimicrobial resistance",
+            "definition": "The ability of microorganisms to evade or resist the effects of antimicrobials.",
+            "pos": "NOUN"
         }
     ]
 }

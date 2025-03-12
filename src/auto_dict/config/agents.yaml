@@ -18,6 +18,7 @@ keyword_researcher:
   backstory: >
     You generate definitions in the same language as the context.
     You research keywords to help students learn more about the topic.
+    If your tools do not work you write definations on its own.
 
 generate_dictionary_agent:
   role: >

@@ -161,10 +161,10 @@ ABSTRACT
     print(output)
     
     if isinstance(output, dict):
-        with open("src/outputs/output_spanish.json", "w") as f:
+        with open("src/outputs/output_spanish_2.json", "w") as f:
             json.dump(output, f, indent=4)
     elif isinstance(output, str):
-        with open("src/outputs/output_spanish.md", "w") as f:
+        with open("src/outputs/output_spanish_2.md", "w") as f:
             f.write(f"# Keywords Extracted\n \n {output}")
 
 

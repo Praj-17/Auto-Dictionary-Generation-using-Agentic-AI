@@ -26,11 +26,21 @@ To set up the project locally, follow these steps:
 2.  Install the required dependencies. It is recommended to use a virtual environment:
 
     ```
+    Install python ==3.10.x
     python -m venv venv
     source venv/bin/activate  # On Linux/macOS
     venv\Scripts\activate  # On Windows
     pip install -r requirements.txt
     ```
+3. Install Ollama
+
+- Install the Ollama Package on your system from this website [OLLAMA download](https://ollama.com/download/windows)
+
+4. Pull the `llama3.2` model
+
+```
+ollama pull llama3.2
+```
 
 ## Usage
 
@@ -38,6 +48,9 @@ To set up the project locally, follow these steps:
 
     -   Configure the necessary API keys and environment variables in the `.env` file.
     -   Modify the `src/auto_dict/configs` file to adjust any specific settings.
+    - You only need to add the [Serper-API-KEY](https://serper.dev/) Generate it from this [link](https://serper.dev/)
+
+    - Paste the key in the `.env` file
 
 2.  **Running the Project:**
 

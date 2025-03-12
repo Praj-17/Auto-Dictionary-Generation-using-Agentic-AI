@@ -15,6 +15,9 @@ class LLMResponse(BaseModel):
 class TextToPydanticConverter:
     def __init__(self,):
         self.llm_instance = LLM.create(provider=LLMProvider.OLLAMA, model_name="llama3.2:latest")
+    
+    def build_conversion_prompt(self, text_sample:str) -> str:
+        return f"""You are tasked with converting the given text sample into a given pydantic model. The text sample is: {text_sample} Make sure to follow the same language style and structure as the given text sample."""
 
     def convert(self, text_sample: str, model_class: BaseModel) -> BaseModel:
         """

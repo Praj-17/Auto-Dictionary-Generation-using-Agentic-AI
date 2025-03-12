@@ -4,6 +4,8 @@ from src.auto_dict.models.models import Dictionary
 from crewai_tools import (
   SerperDevTool
 )
+
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -45,8 +47,7 @@ class AutoDict():
 	def keyword_researcher(self) -> Agent:
 		return Agent(
 			config=self.agents_config['keyword_researcher'],
-			verbose=False,
-			tools=[search_tool]
+			verbose=False
 			
 		)
 

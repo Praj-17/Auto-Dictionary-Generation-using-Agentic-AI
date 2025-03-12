@@ -1,0 +1,34 @@
+{
+    "entries": [
+        {
+            "word": "Aceite esencial",
+            "definition": "A type of essential oil derived from plants.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Antibacteriano",
+            "definition": "Having antibacterial properties or used to prevent bacterial growth.",
+            "pos": "ADJ"
+        },
+        {
+            "word": "Vol\u00e1tiles",
+            "definition": "Refers to substances that evaporate quickly, often used in perfumery or aromatherapy.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Escherichia coli (E. coli)",
+            "definition": "A type of bacteria commonly found in the human gut.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Salmonella enterica (S. enterica)",
+            "definition": "A species of bacteria that can cause food poisoning.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Staphylococcus aureus",
+            "definition": "A type of bacteria commonly found on the skin and in nasal passages.",
+            "pos": "NOUN"
+        }
+    ]
+}
