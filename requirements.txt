@@ -1,5 +1,6 @@
 crewai
 crewai_tools
-pydantic
 simplerllm
-onnxruntime
+langchain-ollama
+databricks
+databricks.sdk

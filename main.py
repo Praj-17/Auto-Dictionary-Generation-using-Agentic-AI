@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
 
   if isinstance(output, dict):
-      with open("output_spanish_3.json", "w") as f:
+      with open("outputs/output_spanish_3.json", "w") as f:
           json.dump(output, f, indent=4)
       # with open("output_spanish_3.md", "w") as f:
       #     f.write(f"# Keywords Extracted\n \n {output['raw']}")
