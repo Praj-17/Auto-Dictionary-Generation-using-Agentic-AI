@@ -1,0 +1,44 @@
+{
+    "entries": [
+        {
+            "word": "Definition",
+            "definition": "Keyword research involves finding and analyzing words or phrases that people use when searching for something on the internet.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Importance",
+            "definition": "Understanding which keywords to target is crucial for attracting relevant traffic to a website, increasing online visibility, and improving search engine rankings.",
+            "pos": "ADV"
+        },
+        {
+            "word": "Head Terms",
+            "definition": "Broad keywords with high search volume but low competition.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Long-Tail Keywords",
+            "definition": "More specific phrases with lower search volumes but higher conversion rates.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Google Keyword Planner",
+            "definition": "A tool used to find and analyze keywords.",
+            "pos": "ADV"
+        },
+        {
+            "word": "Ahrefs",
+            "definition": "A tool used to analyze and track keyword performance.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "SEMrush",
+            "definition": "A tool used to identify and target keywords.",
+            "pos": "ADV"
+        },
+        {
+            "word": "Objective",
+            "definition": "The main goal of keyword research is to find keywords that match your target audience's needs and interests, have a high search volume, are not too competitive, and can be targeted with effective content strategies.",
+            "pos": "NOUN"
+        }
+    ]
+}
