@@ -1,43 +1,53 @@
 {
     "entries": [
         {
-            "word": "Definition",
-            "definition": "Keyword research involves finding and analyzing words or phrases that people use when searching for something on the internet.",
+            "word": "Antibacterianos",
+            "definition": "Substances that inhibit the growth of bacteria.",
             "pos": "NOUN"
         },
         {
-            "word": "Importance",
-            "definition": "Understanding which keywords to target is crucial for attracting relevant traffic to a website, increasing online visibility, and improving search engine rankings.",
-            "pos": "ADV"
+            "word": "Aceites vol\u00e1tiles",
+            "definition": "Volatile oils, which are essential oils that evaporate easily at room temperature.",
+            "pos": "ADJ"
         },
         {
-            "word": "Head Terms",
-            "definition": "Broad keywords with high search volume but low competition.",
+            "word": "Escherichia coli (E. coli)",
+            "definition": "A type of bacteria commonly found in the human gut and in contaminated food and water.",
             "pos": "NOUN"
         },
         {
-            "word": "Long-Tail Keywords",
-            "definition": "More specific phrases with lower search volumes but higher conversion rates.",
+            "word": "Salmonella ent\u00e9rica",
+            "definition": "A type of bacteria that causes salmonellosis, a gastrointestinal illness.",
             "pos": "NOUN"
         },
         {
-            "word": "Google Keyword Planner",
-            "definition": "A tool used to find and analyze keywords.",
-            "pos": "ADV"
-        },
-        {
-            "word": "Ahrefs",
-            "definition": "A tool used to analyze and track keyword performance.",
+            "word": "Staphylococcus aureus",
+            "definition": "A type of bacteria that can cause skin infections, respiratory illnesses, and other diseases.",
             "pos": "NOUN"
         },
         {
-            "word": "SEMrush",
-            "definition": "A tool used to identify and target keywords.",
-            "pos": "ADV"
+            "word": "Clasificaci\u00f3n de los antibacterianos",
+            "definition": "The classification of antibiotics is based on their mechanism of action and resistance to other antibiotics.",
+            "pos": "NOUN"
         },
         {
-            "word": "Objective",
-            "definition": "The main goal of keyword research is to find keywords that match your target audience's needs and interests, have a high search volume, are not too competitive, and can be targeted with effective content strategies.",
+            "word": "Uso de los antibacterianos",
+            "definition": "Antibiotics should be used with caution and under prescription, as they can have severe side effects and interact with other medications.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Resistencia a los antibacterianos",
+            "definition": "The resistance to antibiotics is a growing problem worldwide.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Desarrollo de nuevos antibi\u00f3ticos",
+            "definition": "The development of new antibiotics is essential for combating the resistance to these medications.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Importancia de la prevenci\u00f3n",
+            "definition": "Prevention is key to avoiding infections and diseases.",
             "pos": "NOUN"
         }
     ]
