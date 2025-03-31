@@ -5,12 +5,14 @@ from src.utils.to_pydantic import TextToPydanticConverter
 from src.crew import auto_dict_crew
 from src.models.models import Dictionary
 from src.database import save_word  # ✅ Import MongoDB function to save words
+from src.kokoro_tts import KokoroTTSGenerator
 import asyncio
 
 # ✅ Load environment variables
 load_dotenv()
 
 to_pydantic = TextToPydanticConverter()
+tts_generator = KokoroTTSGenerator()
 
 async def run_long(text, max_retries=5):
     """
@@ -96,15 +98,22 @@ async def run_short(word):
     except Exception as e:
         raise Exception(f"An error occurred while processing the word: {e}")
 if __name__ == "__main__":
-  text = """Oncology"""
-
-  output = asyncio.run(run_short(clean_text(text)))
-  print("output")
-  print(output)
+  text = """Las aves son animales vertebrados que se caracterizan por tener plumas, alas y pico. La mayoría de las aves pueden volar, aunque algunas especies, como el pingüino o el avestruz, no lo hacen. Viven en diversos hábitats alrededor del mundo y desempeñan un papel importante en los ecosistemas, ayudando en la polinización, el control de insectos y la dispersión de semillas. Además, su canto y colorido plumaje las hacen fascinantes para muchas personas."""
 
 
-  if isinstance(output, dict):
-      with open("outputs/output_spanish_3.json", "w") as f:
-          json.dump(output, f, indent=4)
+#   output = asyncio.run(run_short(clean_text(text)))
+#   print("output")
+#   print(output)
+
+  tts_generator = KokoroTTSGenerator(lang_code='e', voice='bf_emma')
+
+# Generate and save audio, yielding each file
+  for file in tts_generator.generate_audio(text):
+    # You can yield or send this to your WebSocket connection here
+    print(f'Generated and saved: {file}')
+
+#   if isinstance(output, dict):
+#       with open("outputs/output_spanish_3.json", "w") as f:
+#           json.dump(output, f, indent=4)
       # with open("output_spanish_3.md", "w") as f:
       #     f.write(f"# Keywords Extracted\n \n {output['raw']}")
