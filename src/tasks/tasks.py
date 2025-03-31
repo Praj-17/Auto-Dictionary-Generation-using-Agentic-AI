@@ -20,7 +20,7 @@ research_task = Task(
     3. Determine the correct POS tag.
     4. Avoid redundancy.
     5. Keep keywords in the original language.
-    
+    6.  if input is a single word or phrase research only about its defination etc no other words
     POS Tag should be one of these
 
     ADJ = "ADJ"  # Adjetivo

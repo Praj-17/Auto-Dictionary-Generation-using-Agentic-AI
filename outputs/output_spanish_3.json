@@ -1,54 +1,44 @@
 {
     "entries": [
         {
-            "word": "Oncology",
-            "definition": "The branch of medicine dealing with the study, diagnosis, treatment, and prevention of cancer.",
-            "pos": "NOUN"
-        },
-        {
             "word": "Cancer",
-            "definition": "A group of diseases characterized by uncontrolled cell growth and invasion into surrounding tissues.",
+            "definition": "A group of diseases characterized by abnormal cell growth and division.",
             "pos": "NOUN"
         },
         {
-            "word": "Tumor",
-            "definition": "An abnormal mass of tissue that can be benign or malignant (cancerous).",
+            "word": "Tumors",
+            "definition": "Abnormal masses of tissue that can be benign or malignant (cancerous).",
             "pos": "NOUN"
         },
         {
-            "word": "Neoplasm",
-            "definition": "A new, abnormal growth of tissue in the body, which can be benign or malignant.",
-            "pos": "NOUN"
+            "word": "Treatment",
+            "definition": "The process of managing a disease, including surgery, chemotherapy, radiation therapy, and other interventions.",
+            "pos": "VERB"
         },
         {
             "word": "Chemotherapy",
             "definition": "A type of cancer treatment that uses chemicals to kill cancer cells.",
-            "pos": "VERB"
-        },
-        {
-            "word": "Radiation therapy",
-            "definition": "A type of cancer treatment that uses high-energy rays to kill cancer cells.",
-            "pos": "VERB"
-        },
-        {
-            "word": "Surgery",
-            "definition": "A medical procedure used to treat cancer by removing a tumor or affected tissue.",
-            "pos": "VERB"
-        },
-        {
-            "word": "Immunotherapy",
-            "definition": "A type of cancer treatment that uses the body's immune system to fight cancer.",
-            "pos": "VERB"
-        },
-        {
-            "word": "Cancer stem cell",
-            "definition": "A subtype of cancer cells that have the ability to divide and grow into new tumors.",
             "pos": "NOUN"
         },
         {
-            "word": "Targeted therapy",
-            "definition": "A type of cancer treatment that targets specific genetic mutations in cancer cells.",
+            "word": "Radiation Therapy",
+            "definition": "A cancer treatment that uses high-energy rays to destroy cancer cells.",
             "pos": "VERB"
+        },
+        {
+            "word": "Medical Research",
+            "definition": "The scientific investigation into the causes, diagnosis, treatment, and prevention of diseases, including cancer.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Genetics",
+            "definition": "The study of heredity and variation in organisms, which can influence an individual's risk of developing certain cancers.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Patient Care",
+            "definition": "The care and support provided to individuals with cancer, including emotional, physical, and psychological support.",
+            "pos": "NOUN"
         }
     ]
 }

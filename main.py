@@ -4,7 +4,7 @@ from src.utils.split_text import chunk_text, clean_text
 from src.utils.to_pydantic import TextToPydanticConverter
 from src.crew import auto_dict_crew
 from src.models.models import Dictionary
-from database import save_word  # ✅ Import MongoDB function to save words
+from src.database import save_word  # ✅ Import MongoDB function to save words
 import asyncio
 
 # ✅ Load environment variables
