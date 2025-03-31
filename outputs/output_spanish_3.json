@@ -1,54 +1,54 @@
 {
     "entries": [
         {
-            "word": "Antibacterianos",
-            "definition": "Substances that inhibit the growth of bacteria.",
+            "word": "Oncology",
+            "definition": "The branch of medicine dealing with the study, diagnosis, treatment, and prevention of cancer.",
             "pos": "NOUN"
         },
         {
-            "word": "Aceites vol\u00e1tiles",
-            "definition": "Volatile oils, which are essential oils that evaporate easily at room temperature.",
-            "pos": "ADJ"
-        },
-        {
-            "word": "Escherichia coli (E. coli)",
-            "definition": "A type of bacteria commonly found in the human gut and in contaminated food and water.",
+            "word": "Cancer",
+            "definition": "A group of diseases characterized by uncontrolled cell growth and invasion into surrounding tissues.",
             "pos": "NOUN"
         },
         {
-            "word": "Salmonella ent\u00e9rica",
-            "definition": "A type of bacteria that causes salmonellosis, a gastrointestinal illness.",
+            "word": "Tumor",
+            "definition": "An abnormal mass of tissue that can be benign or malignant (cancerous).",
             "pos": "NOUN"
         },
         {
-            "word": "Staphylococcus aureus",
-            "definition": "A type of bacteria that can cause skin infections, respiratory illnesses, and other diseases.",
+            "word": "Neoplasm",
+            "definition": "A new, abnormal growth of tissue in the body, which can be benign or malignant.",
             "pos": "NOUN"
         },
         {
-            "word": "Clasificaci\u00f3n de los antibacterianos",
-            "definition": "The classification of antibiotics is based on their mechanism of action and resistance to other antibiotics.",
+            "word": "Chemotherapy",
+            "definition": "A type of cancer treatment that uses chemicals to kill cancer cells.",
+            "pos": "VERB"
+        },
+        {
+            "word": "Radiation therapy",
+            "definition": "A type of cancer treatment that uses high-energy rays to kill cancer cells.",
+            "pos": "VERB"
+        },
+        {
+            "word": "Surgery",
+            "definition": "A medical procedure used to treat cancer by removing a tumor or affected tissue.",
+            "pos": "VERB"
+        },
+        {
+            "word": "Immunotherapy",
+            "definition": "A type of cancer treatment that uses the body's immune system to fight cancer.",
+            "pos": "VERB"
+        },
+        {
+            "word": "Cancer stem cell",
+            "definition": "A subtype of cancer cells that have the ability to divide and grow into new tumors.",
             "pos": "NOUN"
         },
         {
-            "word": "Uso de los antibacterianos",
-            "definition": "Antibiotics should be used with caution and under prescription, as they can have severe side effects and interact with other medications.",
-            "pos": "NOUN"
-        },
-        {
-            "word": "Resistencia a los antibacterianos",
-            "definition": "The resistance to antibiotics is a growing problem worldwide.",
-            "pos": "NOUN"
-        },
-        {
-            "word": "Desarrollo de nuevos antibi\u00f3ticos",
-            "definition": "The development of new antibiotics is essential for combating the resistance to these medications.",
-            "pos": "NOUN"
-        },
-        {
-            "word": "Importancia de la prevenci\u00f3n",
-            "definition": "Prevention is key to avoiding infections and diseases.",
-            "pos": "NOUN"
+            "word": "Targeted therapy",
+            "definition": "A type of cancer treatment that targets specific genetic mutations in cancer cells.",
+            "pos": "VERB"
         }
     ]
 }

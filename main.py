@@ -66,32 +66,47 @@ async def run_long(text, max_retries=5):
         try:
             # convert to json 
             converted_json = to_pydantic.convert(text_sample="\n".join(final_markdown), model_class=Dictionary)
-            print("Converted to json")
         except Exception as e:
             raise Exception(f"An error occurred while converting to json: {e}")
 
 
     return converted_json
 
+async def run_short(word):
+    """
+    Processes a single word or phrase to get its meaning.
 
+    Parameters:
+        word (str): The word or phrase to process.
+
+    Returns:
+        dict: A dictionary containing the processed result.
+    """
+    converted_json = {}
+    try:
+        # Clean the input word or phrase
+        cleaned_word = clean_text(word)
+        
+        # Process the input using the auto_dict_crew
+        result = auto_dict_crew.kickoff(inputs={"context": cleaned_word})
+
+        print(result, type(result))
+        
+        # Convert the result to the desired JSON format
+        try:
+            converted_json = to_pydantic.convert(text_sample=str(result), model_class=Dictionary)
+        except Exception as e:
+            raise Exception(f"An error occurred while converting to json: {e}")
+
+        return converted_json
+    except Exception as e:
+        raise Exception(f"An error occurred while processing the word: {e}")
 if __name__ == "__main__":
-  text = """Artículo de investigación
+  text = """Oncology"""
 
-
-  RESUMEN
-
-  Introducción: El Perú es uno de los países con mayor biodiversidad en especies botánicas, algunas con propiedades medicinales conocidas.
-  Objetivo: Determinar el efecto antibacteriano del aceite esencial de las hojas de Eugenia stipitata McVaugh frente a Staphylococcus aureus ATCC 25923, Escherichia coli ATCC 25922 y Salmonella enterica sv Enteritidis ATCC 13076.
-  Métodos: Estudio de tipo básico con enfoque cuantitativo y experimental. Las plantas provienen del distrito de Belén, ciudad de Iquitos, Departamento de Loreto. La técnica para la extracción del aceite esencial fue la de arrastre de vapor y la técnica microbiológica para determinar el efecto antimicrobiano la de Kirby Bauer. Se trabajaron las muestras en 4 concentraciones 100, 75, 50 y un 25 %; un control negativo solo con dimetilsulfóxido, se utilizaron 5 repeticiones por cada muestra.
-  Resultados: La muestra a concentración al 100 % tuvo actividad antibacteriana contra Staphylococcus aureus. La actividad del ensayo frente a Escherichia coli demostró ser efectiva en todas las muestras, sin embargo, se observó que los halos de inhibición de mayor diámetro se manifestaron en las muestras al 100 % y 75 %. Además, se evidenció actividad antibacteriana a concentraciones del 100 %, 75 % y un 50 % frente a Salmonella enterica sv Enteritidis.
-  Conclusiones: El aceite esencial de las hojas de Eugenia stipitata McVaugh presenta efecto antibacteriano frente a Staphylococcus aureus, Escherichia coli y Salmonella enterica sv Enteritidis.
-
-  Palabras clave: aceites volátiles; antibacterianos; Escherichia coli; Salmonella entérica; Staphylococcus aureus.
-
-  ABSTRACT
-  ."""
-
-  output = asyncio.run(run_long(clean_text(text)))
+  output = asyncio.run(run_short(clean_text(text)))
+  print("output")
+  print(output)
 
 
   if isinstance(output, dict):

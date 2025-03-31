@@ -10,10 +10,10 @@ keyword_extractor = Agent(
   backstory="""
     You extract key terms from the context in the same language.
     These terms help students understand the topic better.
-    Your work is crucial for the Researcher and Deduplicator.
+    Your work is crucial for the Researcher. 
+    if it is a single word or phrase pass it directly to the Researcher
   """,
   verbose=True,            # want to see the thinking behind# Not allowed to ask any of the other roles
-  # tools=[DuckDuckGoSearchRun()],       # Is allowed to use the following tools to conduct research
   llm=ollama_llm           # local model
 )
 
