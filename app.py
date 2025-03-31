@@ -10,6 +10,7 @@ from io import BytesIO
 from fpdf import FPDF
 from langdetect import detect
 from googletrans import Translator
+from database import get_all_words, search_word  # Import MongoDB functions
 
 # ✅ Initialize Translator
 translator = Translator()
@@ -192,3 +193,20 @@ if text:
 
 else:
     st.warning("Please upload a file or enter a PDF URL to extract text.")
+
+st.sidebar.header("📚 Database - Stored Words")
+
+# ✅ Show all stored words
+if st.sidebar.button("📂 View All Words"):
+    words = get_all_words()
+    st.sidebar.write(words)
+
+# ✅ Search a word in MongoDB
+search_query = st.sidebar.text_input("🔎 Search Word in Database")
+if search_query:
+    word_data = search_word(search_query)
+    if word_data:
+        st.sidebar.write(f"**Word:** {word_data['word']}")
+        st.sidebar.write(f"**Meaning:** {word_data['meaning']}")
+    else:
+        st.sidebar.warning("Word not found in database.")    

@@ -1,17 +1,16 @@
-
 from dotenv import load_dotenv
 import json
 from src.utils.split_text import chunk_text, clean_text
 from src.utils.to_pydantic import TextToPydanticConverter
 from src.crew import auto_dict_crew
 from src.models.models import Dictionary
+from database import save_word  # ✅ Import MongoDB function to save words
 import asyncio
 
+# ✅ Load environment variables
 load_dotenv()
+
 to_pydantic = TextToPydanticConverter()
-
-
-
 
 async def run_long(text, max_retries=5):
     """
@@ -23,42 +22,37 @@ async def run_long(text, max_retries=5):
         max_retries (int): Maximum number of retries per chunk.
         
     Returns:
-        str: A markdown string containing the aggregated markdown strings from each successfully processed chunk.
+        dict: A JSON-compatible dictionary containing extracted words.
     """
-    # Split the text into chunks and initialize each input with a retry count
     chunks = chunk_text(text)
     inputs = [{"context": chunk, "retry_count": 5} for chunk in chunks]
     
-    final_markdown = []  # Accumulates raw markdown strings from each successful processing
+    final_markdown = []  
     pending_inputs = inputs
     iteration = 0
-    converted_json = []
+    converted_json = {}  # ✅ Store as a dictionary, not a list
 
     while pending_inputs:
         iteration += 1
         print(f"Iteration {iteration}: Processing {len(pending_inputs)} input(s).")
         
         try:
-            # Assume each result is a JSON dict with a "raw" key containing a markdown string
             results = await auto_dict_crew.kickoff_for_each_async(inputs=pending_inputs)
         except Exception as e:
             raise Exception(f"An error occurred while running the crew: {e}")
 
         next_pending_inputs = []
-        # Process each result with its corresponding input
         for input_dict, result in zip(pending_inputs, results):
             try:
                 print(f"Result: {result.model_dump()['raw']}")
-                # Append the raw markdown string from the "raw" key in the JSON dict
                 final_markdown.append(result.model_dump()['raw'])
             except Exception as e:
-                # Increment retry count and add back if below max_retries
                 input_dict["retry_count"] += 1
                 if input_dict["retry_count"] < max_retries:
                     next_pending_inputs.append(input_dict)
                 else:
                     print(f"Max retries reached for input with context: {input_dict['context'][:30]}...")
-        
+
         if next_pending_inputs:
             print(f"{len(next_pending_inputs)} input(s) failed processing. Reprocessing them.")
         pending_inputs = next_pending_inputs
