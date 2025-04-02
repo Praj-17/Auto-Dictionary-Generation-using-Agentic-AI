@@ -10,10 +10,10 @@ keyword_extractor = Agent(
   backstory="""
     You extract key terms from the context in the same language.
     These terms help students understand the topic better.
-    Your work is crucial for the Researcher and Deduplicator.
+    Your work is crucial for the Researcher. 
+    if input is a single word or phrase pass it directly to the Researcher
   """,
   verbose=True,            # want to see the thinking behind# Not allowed to ask any of the other roles
-  # tools=[DuckDuckGoSearchRun()],       # Is allowed to use the following tools to conduct research
   llm=ollama_llm           # local model
 )
 
@@ -23,7 +23,8 @@ keyword_researcher = Agent(
   goal=' Research keywords and create definitions.',
   backstory="""You generate definitions in the same language as the context.
     You research keywords to help students learn more about the topic.
-    If your tools do not work you write definations on its own.""",
+    If your tools do not work you write definations on its own.
+    if input is a single word or phrase research only about its defination etc no other words """,
   verbose=True,            # want to see the thinking behind# can ask the "researcher" for more information
   llm=ollama_llm  ,          # using the local model
   tools=[serper_tool]

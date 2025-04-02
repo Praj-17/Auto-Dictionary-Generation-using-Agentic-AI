@@ -10,8 +10,7 @@ from io import BytesIO
 from fpdf import FPDF
 from langdetect import detect
 from googletrans import Translator
-from database import get_all_words, search_word  # Import MongoDB functions
-import pandas as pd  # ✅ For table display
+from src.database import get_all_words, search_word  # Import MongoDB functions
 
 # ✅ Initialize Translator
 translator = Translator()

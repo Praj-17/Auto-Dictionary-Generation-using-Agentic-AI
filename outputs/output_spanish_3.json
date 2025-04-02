@@ -1,53 +1,43 @@
 {
     "entries": [
         {
-            "word": "Antibacterianos",
-            "definition": "Substances that inhibit the growth of bacteria.",
+            "word": "Cancer",
+            "definition": "A group of diseases characterized by abnormal cell growth and division.",
             "pos": "NOUN"
         },
         {
-            "word": "Aceites vol\u00e1tiles",
-            "definition": "Volatile oils, which are essential oils that evaporate easily at room temperature.",
-            "pos": "ADJ"
-        },
-        {
-            "word": "Escherichia coli (E. coli)",
-            "definition": "A type of bacteria commonly found in the human gut and in contaminated food and water.",
+            "word": "Tumors",
+            "definition": "Abnormal masses of tissue that can be benign or malignant (cancerous).",
             "pos": "NOUN"
         },
         {
-            "word": "Salmonella ent\u00e9rica",
-            "definition": "A type of bacteria that causes salmonellosis, a gastrointestinal illness.",
+            "word": "Treatment",
+            "definition": "The process of managing a disease, including surgery, chemotherapy, radiation therapy, and other interventions.",
+            "pos": "VERB"
+        },
+        {
+            "word": "Chemotherapy",
+            "definition": "A type of cancer treatment that uses chemicals to kill cancer cells.",
             "pos": "NOUN"
         },
         {
-            "word": "Staphylococcus aureus",
-            "definition": "A type of bacteria that can cause skin infections, respiratory illnesses, and other diseases.",
+            "word": "Radiation Therapy",
+            "definition": "A cancer treatment that uses high-energy rays to destroy cancer cells.",
+            "pos": "VERB"
+        },
+        {
+            "word": "Medical Research",
+            "definition": "The scientific investigation into the causes, diagnosis, treatment, and prevention of diseases, including cancer.",
             "pos": "NOUN"
         },
         {
-            "word": "Clasificaci\u00f3n de los antibacterianos",
-            "definition": "The classification of antibiotics is based on their mechanism of action and resistance to other antibiotics.",
+            "word": "Genetics",
+            "definition": "The study of heredity and variation in organisms, which can influence an individual's risk of developing certain cancers.",
             "pos": "NOUN"
         },
         {
-            "word": "Uso de los antibacterianos",
-            "definition": "Antibiotics should be used with caution and under prescription, as they can have severe side effects and interact with other medications.",
-            "pos": "NOUN"
-        },
-        {
-            "word": "Resistencia a los antibacterianos",
-            "definition": "The resistance to antibiotics is a growing problem worldwide.",
-            "pos": "NOUN"
-        },
-        {
-            "word": "Desarrollo de nuevos antibi\u00f3ticos",
-            "definition": "The development of new antibiotics is essential for combating the resistance to these medications.",
-            "pos": "NOUN"
-        },
-        {
-            "word": "Importancia de la prevenci\u00f3n",
-            "definition": "Prevention is key to avoiding infections and diseases.",
+            "word": "Patient Care",
+            "definition": "The care and support provided to individuals with cancer, including emotional, physical, and psychological support.",
             "pos": "NOUN"
         }
     ]

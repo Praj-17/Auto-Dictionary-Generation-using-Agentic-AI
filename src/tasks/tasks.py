@@ -7,6 +7,7 @@ keyword_task = Task(
     2. Identify key terms from a student's perspective.
     3. Ensure no redundancy in keywords.
     4. Use concise and precise keywords.
+    5. If it is a single word or phrase no need to identify or extract any additional words just pass the word as it is to the researcher. 
 
     Here is the context: {context}""",
   expected_output=" A structured list of keywords with definitions from the {context}"
@@ -19,8 +20,7 @@ research_task = Task(
     3. Determine the correct POS tag.
     4. Avoid redundancy.
     5. Keep keywords in the original language.
-    6. 
-    
+    6.  if input is a single word or phrase research only about its defination etc no other words
     POS Tag should be one of these
 
     ADJ = "ADJ"  # Adjetivo

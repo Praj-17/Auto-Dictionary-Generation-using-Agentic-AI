@@ -5,12 +5,15 @@ from src.utils.split_text import chunk_text, clean_text
 from src.utils.to_pydantic import TextToPydanticConverter
 from src.crew import auto_dict_crew
 from src.models.models import Dictionary
-from database import save_word  # ✅ Import MongoDB function to save words
+from src.database import save_word  # ✅ Import MongoDB function to save words
+from src.kokoro_tts import KokoroTTSGenerator
+import asyncio
 
 # ✅ Load environment variables
 load_dotenv()
 
 to_pydantic = TextToPydanticConverter()
+tts_generator = KokoroTTSGenerator()
 
 async def run_long(text, max_retries=5):
     """
@@ -96,27 +99,54 @@ async def run_long(text, max_retries=5):
         print(f"❌ Error in run_long(): {e}")
         return {"error": str(e)}
 
-if __name__ == "__main__":
-    text = """Artículo de investigación
+    return converted_json
 
-    RESUMEN
-
-    Introducción: El Perú es uno de los países con mayor biodiversidad en especies botánicas, algunas con propiedades medicinales conocidas.
-    Objetivo: Determinar el efecto antibacteriano del aceite esencial de las hojas de Eugenia stipitata McVaugh frente a Staphylococcus aureus ATCC 25923, Escherichia coli ATCC 25922 y Salmonella enterica sv Enteritidis ATCC 13076.
-    Métodos: Estudio de tipo básico con enfoque cuantitativo y experimental. Las plantas provienen del distrito de Belén, ciudad de Iquitos, Departamento de Loreto. La técnica para la extracción del aceite esencial fue la de arrastre de vapor y la técnica microbiológica para determinar el efecto antimicrobiano la de Kirby Bauer. Se trabajaron las muestras en 4 concentraciones 100, 75, 50 y un 25 %; un control negativo solo con dimetilsulfóxido, se utilizaron 5 repeticiones por cada muestra.
-    Resultados: La muestra a concentración al 100 % tuvo actividad antibacteriana contra Staphylococcus aureus. La actividad del ensayo frente a Escherichia coli demostró ser efectiva en todas las muestras, sin embargo, se observó que los halos de inhibición de mayor diámetro se manifestaron en las muestras al 100 % y 75 %. Además, se evidenció actividad antibacteriana a concentraciones del 100 %, 75 % y un 50 % frente a Salmonella enterica sv Enteritidis.
-    Conclusiones: El aceite esencial de las hojas de Eugenia stipitata McVaugh presenta efecto antibacteriano frente a Staphylococcus aureus, Escherichia coli y Salmonella enterica sv Enteritidis.
-
-    Palabras clave: aceites volátiles; antibacterianos; Escherichia coli; Salmonella entérica; Staphylococcus aureus.
-
-    ABSTRACT
+async def run_short(word):
     """
+    Processes a single word or phrase to get its meaning.
 
-    output = asyncio.run(run_long(clean_text(text)))
+    Parameters:
+        word (str): The word or phrase to process.
 
-    if isinstance(output, list):
-        with open("outputs/output_spanish_3.json", "w") as f:
-            json.dump(output, f, indent=4)
-        print("✅ Output successfully saved to JSON.")
-    else:
-        print("⚠️ Output is not valid JSON:", output)
+    Returns:
+        dict: A dictionary containing the processed result.
+    """
+    converted_json = {}
+    try:
+        # Clean the input word or phrase
+        cleaned_word = clean_text(word)
+        
+        # Process the input using the auto_dict_crew
+        result = auto_dict_crew.kickoff(inputs={"context": cleaned_word})
+
+        print(result, type(result))
+        
+        # Convert the result to the desired JSON format
+        try:
+            converted_json = to_pydantic.convert(text_sample=str(result), model_class=Dictionary)
+        except Exception as e:
+            raise Exception(f"An error occurred while converting to json: {e}")
+
+        return converted_json
+    except Exception as e:
+        raise Exception(f"An error occurred while processing the word: {e}")
+if __name__ == "__main__":
+  text = """Las aves son animales vertebrados que se caracterizan por tener plumas, alas y pico. La mayoría de las aves pueden volar, aunque algunas especies, como el pingüino o el avestruz, no lo hacen. Viven en diversos hábitats alrededor del mundo y desempeñan un papel importante en los ecosistemas, ayudando en la polinización, el control de insectos y la dispersión de semillas. Además, su canto y colorido plumaje las hacen fascinantes para muchas personas."""
+
+
+#   output = asyncio.run(run_short(clean_text(text)))
+#   print("output")
+#   print(output)
+
+  tts_generator = KokoroTTSGenerator(lang_code='e', voice='bf_emma')
+
+# Generate and save audio, yielding each file
+  for file in tts_generator.generate_audio(text):
+    # You can yield or send this to your WebSocket connection here
+    print(f'Generated and saved: {file}')
+
+#   if isinstance(output, dict):
+#       with open("outputs/output_spanish_3.json", "w") as f:
+#           json.dump(output, f, indent=4)
+      # with open("output_spanish_3.md", "w") as f:
+      #     f.write(f"# Keywords Extracted\n \n {output['raw']}")
