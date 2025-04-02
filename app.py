@@ -5,12 +5,13 @@ import json
 import os
 from main import run_long
 from src.utils.split_text import clean_text
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 from io import BytesIO
 from fpdf import FPDF
 from langdetect import detect
 from googletrans import Translator
 from database import get_all_words, search_word  # Import MongoDB functions
+import pandas as pd  # ✅ For table display
 
 # ✅ Initialize Translator
 translator = Translator()
@@ -194,19 +195,29 @@ if text:
 else:
     st.warning("Please upload a file or enter a PDF URL to extract text.")
 
-st.sidebar.header("📚 Database - Stored Words")
 
-# ✅ Show all stored words
-if st.sidebar.button("📂 View All Words"):
+
+if st.button("📂 View All Words"):
     words = get_all_words()
-    st.sidebar.write(words)
+    
+    print("🔍 Debugging: Retrieved words from database")
+    print(words)  # ✅ Print retrieved words for debugging
+    
+    if words:
+        for word in words:
+            st.write(f"**Word:** {word.get('word', 'Unknown')}")
+            st.write(f"**Definition:** {word.get('definition', 'No definition available')}")
+            st.write("---")
+    else:
+        st.warning("No words found in the database.")
 
-# ✅ Search a word in MongoDB
+
+# ✅ Sidebar Search
 search_query = st.sidebar.text_input("🔎 Search Word in Database")
 if search_query:
     word_data = search_word(search_query)
     if word_data:
         st.sidebar.write(f"**Word:** {word_data['word']}")
-        st.sidebar.write(f"**Meaning:** {word_data['meaning']}")
+        st.sidebar.write(f"**Meaning:** {word_data['definition']}")
     else:
-        st.sidebar.warning("Word not found in database.")    
+        st.sidebar.warning("Word not found in database.")

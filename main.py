@@ -1,11 +1,11 @@
 from dotenv import load_dotenv
 import json
+import asyncio
 from src.utils.split_text import chunk_text, clean_text
 from src.utils.to_pydantic import TextToPydanticConverter
 from src.crew import auto_dict_crew
 from src.models.models import Dictionary
 from database import save_word  # ✅ Import MongoDB function to save words
-import asyncio
 
 # ✅ Load environment variables
 load_dotenv()
@@ -22,7 +22,7 @@ async def run_long(text, max_retries=5):
         max_retries (int): Maximum number of retries per chunk.
         
     Returns:
-        dict: A JSON-compatible dictionary containing extracted words.
+        list: A list of dictionaries, each containing a word and its definition.
     """
     chunks = chunk_text(text)
     inputs = [{"context": chunk, "retry_count": 5} for chunk in chunks]
@@ -30,7 +30,6 @@ async def run_long(text, max_retries=5):
     final_markdown = []  
     pending_inputs = inputs
     iteration = 0
-    converted_json = {}  # ✅ Store as a dictionary, not a list
 
     while pending_inputs:
         iteration += 1
@@ -58,19 +57,41 @@ async def run_long(text, max_retries=5):
         pending_inputs = next_pending_inputs
 
     try:
-        # ✅ Process text into JSON format
+        # ✅ Ensure the JSON structure is valid before accessing 'meaning'
         converted_json = to_pydantic.convert(text_sample=text, model_class=Dictionary)
-        print("✅ Converted to JSON successfully!")
-
-        # ✅ Save words to MongoDB
+        
+        print("✅ Full JSON Response:")
+        print(json.dumps(converted_json, indent=4))  # ✅ Print the full JSON for debugging
+        
         if isinstance(converted_json, dict):
-            for word, meaning in converted_json.items():
-                print(f"📝 Saving word: {word}")
-                save_word(word, meaning)  # Store words in MongoDB
-            return converted_json
+            if "entries" in converted_json:
+                words_list = converted_json["entries"]  # ✅ Extract from 'entries' instead of 'meaning'
+            elif "meaning" in converted_json:
+                words_list = converted_json["meaning"]  # ✅ Fallback if 'meaning' exists
+            else:
+                print("❌ Error: JSON does not contain 'entries' or 'meaning'")
+                return {"error": "Invalid JSON structure, missing 'entries' or 'meaning'"}
+
+            if isinstance(words_list, list):
+                # ✅ Save each word separately instead of storing them as a list
+                for word_entry in words_list:
+                    if isinstance(word_entry, dict) and "word" in word_entry and "definition" in word_entry:
+                        word_data = {
+                            "word": word_entry["word"],
+                            "definition": word_entry["definition"]
+                        }
+                        save_word(word_data)  # ✅ Save each word independently
+                        print(f"✅ Saved: {word_data}")
+                    else:
+                        print("⚠️ Skipping invalid word entry:", word_entry)
+
+                return words_list
+            else:
+                print("❌ Error: 'entries' or 'meaning' field is not a list")
+                return {"error": "'entries' or 'meaning' field is not a list"}
         else:
-            print("❌ Error: Output is not valid JSON format")
-            return {"error": "Unexpected output format"}
+            print("❌ Error: Invalid JSON structure, expected dictionary")
+            return {"error": "Invalid JSON structure, expected dictionary"}
     except Exception as e:
         print(f"❌ Error in run_long(): {e}")
         return {"error": str(e)}
@@ -93,7 +114,7 @@ if __name__ == "__main__":
 
     output = asyncio.run(run_long(clean_text(text)))
 
-    if isinstance(output, dict):
+    if isinstance(output, list):
         with open("outputs/output_spanish_3.json", "w") as f:
             json.dump(output, f, indent=4)
         print("✅ Output successfully saved to JSON.")
