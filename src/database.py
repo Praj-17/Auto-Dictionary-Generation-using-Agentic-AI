@@ -7,20 +7,24 @@ client = MongoClient(MONGO_URI)
 db = client["autodictionary_db"]
 collection = db["words"]
 
-def save_word(word, meaning):
-    """Save word and meaning to MongoDB without checking for duplicates."""
-    try:
-        collection.insert_one({"word": word, "meaning": meaning})
-        print(f"✅ Word '{word}' saved to database.")
-    except Exception as e:
-        print(f"❌ Error saving word '{word}': {e}")
+def save_word(word_data):
+    """ Save a word and its definition to MongoDB. """
+    if isinstance(word_data, dict) and "word" in word_data:
+        # Ensure 'definition' exists before saving
+        word_data["definition"] = word_data.get("definition", "No definition available")
 
+        existing_entry = collection.find_one({"word": word_data["word"]})
 
+        if existing_entry:
+            print(f"⚠️ Word '{word_data['word']}' already exists in the database. Skipping.")
+        else:
+            collection.insert_one(word_data)
+            print(f"✅ Word '{word_data['word']}' successfully saved.")
 
 def get_all_words():
-    """Retrieve all stored words from MongoDB."""
-    return list(collection.find({}, {"_id": 0}))  # Exclude MongoDB `_id` field
+    """ Retrieves all words stored in the database. """
+    return list(collection.find({}, {"_id": 0}))  # Exclude `_id`
 
 def search_word(word):
-    """Search for a specific word in MongoDB."""
-    return collection.find_one({"word": word}, {"_id": 0})
+    """ Searches for a specific word in the database. """
+    return collection.find_one({"word": word}, {"_id": 0})  # ✅ Ensure `_id` is excluded

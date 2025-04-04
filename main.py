@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import json
+import asyncio
 from src.utils.split_text import chunk_text, clean_text
 from src.utils.to_pydantic import TextToPydanticConverter
 from src.crew import auto_dict_crew
@@ -24,7 +25,7 @@ async def run_long(text, max_retries=5):
         max_retries (int): Maximum number of retries per chunk.
         
     Returns:
-        dict: A JSON-compatible dictionary containing extracted words.
+        list: A list of dictionaries, each containing a word and its definition.
     """
     chunks = chunk_text(text)
     inputs = [{"context": chunk, "retry_count": 5} for chunk in chunks]
@@ -32,7 +33,6 @@ async def run_long(text, max_retries=5):
     final_markdown = []  
     pending_inputs = inputs
     iteration = 0
-    converted_json = {}  # ✅ Store as a dictionary, not a list
 
     while pending_inputs:
         iteration += 1
@@ -59,12 +59,45 @@ async def run_long(text, max_retries=5):
             print(f"{len(next_pending_inputs)} input(s) failed processing. Reprocessing them.")
         pending_inputs = next_pending_inputs
 
-        try:
-            # convert to json 
-            converted_json = to_pydantic.convert(text_sample="\n".join(final_markdown), model_class=Dictionary)
-        except Exception as e:
-            raise Exception(f"An error occurred while converting to json: {e}")
+    try:
+        # ✅ Ensure the JSON structure is valid before accessing 'meaning'
+        converted_json = to_pydantic.convert(text_sample=text, model_class=Dictionary)
+        
+        print("✅ Full JSON Response:")
+        print(json.dumps(converted_json, indent=4))  # ✅ Print the full JSON for debugging
+        
+        if isinstance(converted_json, dict):
+            if "entries" in converted_json:
+                words_list = converted_json["entries"]  # ✅ Extract from 'entries' instead of 'meaning'
+            elif "meaning" in converted_json:
+                words_list = converted_json["meaning"]  # ✅ Fallback if 'meaning' exists
+            else:
+                print("❌ Error: JSON does not contain 'entries' or 'meaning'")
+                return {"error": "Invalid JSON structure, missing 'entries' or 'meaning'"}
 
+            if isinstance(words_list, list):
+                # ✅ Save each word separately instead of storing them as a list
+                for word_entry in words_list:
+                    if isinstance(word_entry, dict) and "word" in word_entry and "definition" in word_entry:
+                        word_data = {
+                            "word": word_entry["word"],
+                            "definition": word_entry["definition"]
+                        }
+                        save_word(word_data)  # ✅ Save each word independently
+                        print(f"✅ Saved: {word_data}")
+                    else:
+                        print("⚠️ Skipping invalid word entry:", word_entry)
+
+                return words_list
+            else:
+                print("❌ Error: 'entries' or 'meaning' field is not a list")
+                return {"error": "'entries' or 'meaning' field is not a list"}
+        else:
+            print("❌ Error: Invalid JSON structure, expected dictionary")
+            return {"error": "Invalid JSON structure, expected dictionary"}
+    except Exception as e:
+        print(f"❌ Error in run_long(): {e}")
+        return {"error": str(e)}
 
     return converted_json
 
