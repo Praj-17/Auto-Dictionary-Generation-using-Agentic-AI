@@ -3,13 +3,14 @@ import requests
 import asyncio
 import json
 import os
-from main import run_long
+from langdetect import detect
+from googletrans import Translator
 from src.utils.split_text import clean_text
 from PyPDF2 import PdfReader
 from io import BytesIO
 from fpdf import FPDF
-from langdetect import detect
-from googletrans import Translator
+from main import run_long, run_short
+
 from src.database import get_all_words, search_word  # Import MongoDB functions
 
 # ✅ Initialize Translator
