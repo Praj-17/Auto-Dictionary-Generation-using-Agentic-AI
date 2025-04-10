@@ -5,7 +5,7 @@ def count_tokens(text: str) -> int:
     """Counts tokens by splitting the text on whitespace."""
     return len(text)//4
 
-def chunk_text(text: str, chunk_size: int = 250, chunk_overlap: int = 50):
+def chunk_text(text: str, chunk_size: int = 4000, chunk_overlap: int = 20):
     """
     Splits the given text into overlapping chunks using LangChain's CharacterTextSplitter.
 

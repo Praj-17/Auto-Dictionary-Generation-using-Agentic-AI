@@ -1,0 +1,74 @@
+[
+    [
+        {
+            "word": "Aves",
+            "definition": "Grupo diverso de animales vertebrados, calidosos y con plumas, que son protagonistas en los ecosistemas y est\u00e1n relacionados m\u00e1s estrechamente con los teropodos carn\u00edvoros que con cualquier otro grupo de tetrapodos.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Animales vertebrados",
+            "definition": "Subfilo del filo Chordata que incluye a los animales con la caracter\u00edstica de tener un sistema de esqueleto interno o constricci\u00f3n de tejidos, y que incluye a peces, aves, mam\u00edferos, reptiles y anfibios.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Plumas",
+            "definition": "Estructuras filamentosas, cubiertas de escamas o quillados, que crecen a partir de la piel de las aves y sirven para protegerse, mantener la temperatura corporal y ayudar en el vuelo.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Alas",
+            "definition": "Estructuras anat\u00f3micas adaptadas para el vuelo, encontradas en aves y algunos otros animales como los insectos y los murci\u00e9lagos.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Pico",
+            "definition": "Partes del beak de una ave, adaptada para capturar, perforar o manipular alimento, dependiendo de la especie.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Volar",
+            "definition": "Capacidad que tienen algunas aves y otros animales para moverse a trav\u00e9s del aire utilizando sus alas o estructuras similares.",
+            "pos": "VERB"
+        },
+        {
+            "word": "H\u00e1bitats diversos",
+            "definition": "Entornos naturales que ofrecen a las aves y otros organismos los recursos necesarios para sobrevivir y reproducirse, siendo esenciales para la biodiversidad.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Ecosistemas",
+            "definition": "Comunidades de organismos interdependientes que conviven en un entorno espec\u00edfico, interactuando entre s\u00ed y con su ambiente f\u00edsico.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Polinizaci\u00f3n",
+            "definition": "Proceso por el cual los polinizadores, como las aves, ayudan a transferir el polen entre plantas de manera que favorece la reproducci\u00f3n vegetal.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Control de insectos",
+            "definition": "Mecanismos naturales y/o manejamientos agr\u00edcolas destinados a regular la poblaci\u00f3n de insectos, tanto beneficiosos como perjudiciales para las culturas.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Dispersi\u00f3n de semillas",
+            "definition": "Mecanismo natural por el cual las semillas son distribuidas a trav\u00e9s de diferentes medios, como el viento, el agua o animales como las aves.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Biodiversidad",
+            "definition": "Variedad de formas de vida presente en la Tierra, desde los microorganismos hasta los ecosistemas completos, que es vital para el mantenimiento de la salud global y la resiliencia ecol\u00f3gica.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Resiliencia ecol\u00f3gica",
+            "definition": "Capacidad de los ecosistemas para mantener sus funciones y recoverse despu\u00e9s de ser perturbados por factores naturales o antropog\u00e9nicos.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Coexistir",
+            "definition": "Vivir juntos diferentes especies o grupos en un entorno de manera sostenible, donde ninguna de ellas domina a las dem\u00e1s, lo que favorece la biodiversidad y el equilibrio ecol\u00f3gico.",
+            "pos": "VERB"
+        }
+    ]
+]

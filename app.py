@@ -145,19 +145,19 @@ if text:
     detected_lang = detect_language(text)
     st.sidebar.write(f"**Detected Language:** `{detected_lang.upper()}`")
 
-    if detected_lang != "en":
-        if st.sidebar.button("🌍 Translate to English"):
-            translated_text = translate_text(text, "en")
-            with st.expander("📖 Translated Text", expanded=True):
-                st.text_area("Translated Text", translated_text[:2000], height=300)
-            text = translated_text  # Update for processing
+    # if detected_lang != "en":
+    #     if st.sidebar.button("🌍 Translate to English"):
+    #         translated_text = translate_text(text, "en")
+    #         with st.expander("📖 Translated Text", expanded=True):
+    #             st.text_area("Translated Text", translated_text[:2000], height=300)
+    #         text = translated_text  # Update for processing
 
     # ⚡ **Process Extracted Text**
     if st.button("⚡ Process Extracted Text"):
         with st.spinner("Processing... Please wait."):
             try:
                 output = asyncio.run(run_long(clean_text(text)))
-                if isinstance(output, dict):
+                if isinstance(output, dict) or isinstance(output, list):
                     with st.expander("📌 Extracted Words", expanded=True):
                         st.json(output)
 

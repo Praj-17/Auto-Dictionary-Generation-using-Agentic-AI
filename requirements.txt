@@ -1,5 +1,5 @@
 crewai
-crewai_tools
+crewai[tools]
 simplerllm
 langchain-ollama
 databricks
@@ -12,3 +12,4 @@ streamlit
 kokoro
 soundfile
 pymongo
+pycountry

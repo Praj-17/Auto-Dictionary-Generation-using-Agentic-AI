@@ -6,6 +6,6 @@ from crewai import Crew
 auto_dict_crew = Crew(
   agents=[keyword_extractor, keyword_researcher, generate_dictionary_agent],
   tasks=[keyword_task, research_task, generate_dictionary_task],
-  verbose=1, # You can set it to 1 or 2 for different logging levels
+  verbose = 1
 )
 

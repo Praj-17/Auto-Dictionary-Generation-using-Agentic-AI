@@ -1,44 +1,74 @@
 {
     "entries": [
         {
-            "word": "Cancer",
-            "definition": "A group of diseases characterized by abnormal cell growth and division.",
+            "word": "Aves",
+            "definition": "birds that are vertebrate animals characterized by having feathers and beaks.",
             "pos": "NOUN"
         },
         {
-            "word": "Tumors",
-            "definition": "Abnormal masses of tissue that can be benign or malignant (cancerous).",
+            "word": "Vertebrados",
+            "definition": "animals with backbones or spinal columns.",
             "pos": "NOUN"
         },
         {
-            "word": "Treatment",
-            "definition": "The process of managing a disease, including surgery, chemotherapy, radiation therapy, and other interventions.",
+            "word": "Plumas alas y pico",
+            "definition": "wings and beak.",
+            "pos": "UNKNOWN"
+        },
+        {
+            "word": "Volar",
+            "definition": "to fly.",
             "pos": "VERB"
         },
         {
-            "word": "Chemotherapy",
-            "definition": "A type of cancer treatment that uses chemicals to kill cancer cells.",
+            "word": "Ping\u00fcino",
+            "definition": "a species of bird that cannot fly.",
+            "pos": "PROPN"
+        },
+        {
+            "word": "Avestruz",
+            "definition": "a species of bird that cannot fly.",
+            "pos": "PROPN"
+        },
+        {
+            "word": "H\u00e1bitats",
+            "definition": "habitats or environments where the birds live.",
             "pos": "NOUN"
         },
         {
-            "word": "Radiation Therapy",
-            "definition": "A cancer treatment that uses high-energy rays to destroy cancer cells.",
+            "word": "Ecosistemas",
+            "definition": "ecosystems in which the birds play an important role.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Polinizaci\u00f3n",
+            "definition": "pollination, a process in which plants reproduce.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Control de insectos",
+            "definition": "control of insects, a way to manage their populations.",
+            "pos": "UNKNOWN"
+        },
+        {
+            "word": "Dispersi\u00f3n de semillas",
+            "definition": "seed dispersal, the spread of seeds from one place to another.",
+            "pos": "NOUN"
+        },
+        {
+            "word": "Canto",
+            "definition": "singing or vocalizing.",
             "pos": "VERB"
         },
         {
-            "word": "Medical Research",
-            "definition": "The scientific investigation into the causes, diagnosis, treatment, and prevention of diseases, including cancer.",
-            "pos": "NOUN"
+            "word": "Colorido plumaje",
+            "definition": "colorful plumage or feathers.",
+            "pos": "UNKNOWN"
         },
         {
-            "word": "Genetics",
-            "definition": "The study of heredity and variation in organisms, which can influence an individual's risk of developing certain cancers.",
-            "pos": "NOUN"
-        },
-        {
-            "word": "Patient Care",
-            "definition": "The care and support provided to individuals with cancer, including emotional, physical, and psychological support.",
-            "pos": "NOUN"
+            "word": "Fascinantes para muchas personas",
+            "definition": "fascinating for many people.",
+            "pos": "ADJ"
         }
     ]
 }
