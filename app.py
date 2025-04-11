@@ -1,30 +1,50 @@
 import streamlit as st  # ✅ Streamlit must be imported first!
+from streamlit_pdf_viewer import pdf_viewer  # Integrated PDF viewer
 import requests
 import asyncio
 import json
 import os
-from langdetect import detect
-from googletrans import Translator
+import torch
+import warnings
+
+# Import helper functions from helpers.py
+from src.helpers import (
+    extract_text_from_file,
+    extract_text_from_pdf_url,
+    detect_language,
+    translate_text,
+    download_as_text,
+    download_as_pdf,
+    text_to_speech  # Now uses the Kokoro-based TTS
+)
+
+# Additional imports used in your app
 from src.utils.split_text import clean_text
 from pypdf import PdfReader
 from io import BytesIO
 from fpdf import FPDF
-from main import run_long, run_short
-
+from main import run_long, run_short  # If defined elsewhere in your codebase
 from src.database import get_all_words, search_word  # Import MongoDB functions
 
-# ✅ Initialize Translator
-translator = Translator()
+# Environment and warning configurations
+os.environ["STREAMLIT_SERVER_ENABLE_FILE_WATCHER"] = "false"
+torch.classes.__path__ = []
+warnings.filterwarnings("ignore", message="<built-in function callable> is not a Python type")
+warnings.filterwarnings("ignore", category=FutureWarning, module="torch.nn.utils.weight_norm")
 
 # ✅ Set page title and layout
 st.set_page_config(page_title="Autodictionary", layout="wide")
 
-# 🎨 Custom CSS for better UI
+# ✅ Initialize session state for processed output
+if "processed_output" not in st.session_state:
+    st.session_state["processed_output"] = None
+
+# 🎨 Custom CSS for UI styling
 st.markdown(
     """
     <style>
     h1, h2, h3, h4, h5, h6, .stText, .stMarkdown, label {
-        color: #004aad !important; /* Deep blue color */
+        color: #004aad !important;
     }
     .stButton>button {
         background-color: #4CAF50 !important;
@@ -33,190 +53,169 @@ st.markdown(
         font-weight: bold;
         padding: 10px 20px;
     }
+    .sidebar-section {
+        background-color: #f5f5f5;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# ✅ Function to extract text from uploaded PDF or TXT files
-def extract_text_from_file(uploaded_files):
-    extracted_texts = []
-    for uploaded_file in uploaded_files:
-        if uploaded_file.type == "text/plain":
-            extracted_texts.append(uploaded_file.read().decode("utf-8"))
-        elif uploaded_file.type == "application/pdf":
-            pdf_reader = PdfReader(uploaded_file)
-            text = "\n".join([page.extract_text() for page in pdf_reader.pages if page.extract_text()])
-            extracted_texts.append(text)
-    return "\n\n".join(extracted_texts)  # Combine all extracted texts
-
-# ✅ Function to download & extract text from a PDF URL
-def extract_text_from_pdf_url(pdf_url):
-    try:
-        # Download the PDF file
-        response = requests.get(pdf_url, stream=True)
-        response.raise_for_status()
-
-        # Save the PDF temporarily
-        temp_pdf_path = "temp_research_paper.pdf"
-        with open(temp_pdf_path, "wb") as f:
-            for chunk in response.iter_content(chunk_size=4096):
-                f.write(chunk)
-
-        # Extract text from the PDF
-        pdf_reader = PdfReader(temp_pdf_path)
-        text = "\n".join([page.extract_text() for page in pdf_reader.pages if page.extract_text()])
-
-        # Delete temporary file
-        os.remove(temp_pdf_path)
-
-        return text if text else "No readable text found in the PDF."
-    
-    except requests.exceptions.RequestException as e:
-        return f"Error downloading PDF: {e}"
-    except Exception as e:
-        return f"Error extracting text from PDF: {e}"
-
-# ✅ Detect the language of the text
-def detect_language(text):
-    try:
-        return detect(text)
-    except:
-        return "Unknown"
-
-# ✅ Translate text to English
-def translate_text(text, target_lang="en"):
-    try:
-        return translator.translate(text, dest=target_lang).text
-    except:
-        return "Translation failed."
-
-# ✅ Convert JSON to a text file
-def download_as_text(data):
-    return BytesIO(json.dumps(data, indent=4).encode("utf-8"))
-
-# ✅ Convert JSON to a PDF file
-def download_as_pdf(data):
-    pdf = FPDF()
-    pdf.set_auto_page_break(auto=True, margin=15)
-    pdf.add_page()
-    pdf.set_font("Arial", size=12)
-    for line in json.dumps(data, indent=4).split("\n"):
-        pdf.cell(200, 10, txt=line, ln=True)
-    pdf_buffer = BytesIO()
-    pdf_output = pdf.output(dest='S').encode('latin1')
-    pdf_buffer.write(pdf_output)
-    pdf_buffer.seek(0)
-    return pdf_buffer
-
-# 🏆 **Page Header**
-st.title("📖 Autodictionary - Intelligent Word Extraction")
-
-# 📂 **File Upload Section**
-st.sidebar.header("Upload Your Files")
+# ============================
+# Sidebar: File Upload & PDF URL Input
+# ============================
+st.sidebar.header("Upload & PDF URL")
 uploaded_files = st.sidebar.file_uploader(
     "Upload PDF or TXT files", 
     type=["pdf", "txt"], 
     accept_multiple_files=True
 )
-
-# 🌐 **PDF URL Input Section**
 st.sidebar.subheader("Extract from PDF URL")
 pdf_url_input = st.sidebar.text_input("Enter the URL of a research paper PDF:")
 
-# 📌 **Text Extraction Logic**
-text = ""
-
-# 📂 Process Uploaded Files
+# ============================
+# Main File Viewer & Read Aloud Feature
+# ============================
 if uploaded_files:
-    text = extract_text_from_file(uploaded_files)
-
-# 🌐 Process PDF URL Input
-elif pdf_url_input:
-    st.sidebar.write("🔄 Downloading & Extracting text from PDF...")
-    text = extract_text_from_pdf_url(pdf_url_input)
-
-# 📜 **Display Extracted Text**
-if text:
-    with st.expander("📜 Extracted Text Preview", expanded=False):
-        st.text_area("Extracted Text", text[:2000], height=300)
-
-    # 🌍 **Language Detection & Translation**
-    detected_lang = detect_language(text)
-    st.sidebar.write(f"**Detected Language:** `{detected_lang.upper()}`")
-
-    # if detected_lang != "en":
-    #     if st.sidebar.button("🌍 Translate to English"):
-    #         translated_text = translate_text(text, "en")
-    #         with st.expander("📖 Translated Text", expanded=True):
-    #             st.text_area("Translated Text", translated_text[:2000], height=300)
-    #         text = translated_text  # Update for processing
-
-    # ⚡ **Process Extracted Text**
-    # ⚡ **Process Extracted Text**
-    if st.button("⚡ Process Extracted Text"):
-        with st.spinner("Processing... Please wait."):
-            try:
-                output = asyncio.run(run_long(clean_text(text)))
-                if isinstance(output, dict) or isinstance(output, list):
-                    with st.expander("📌 Extracted Words", expanded=True):
-                        st.json(output)
-
-                    # 🔍 **Search & Filter**
-                    search_query = st.text_input("🔎 Search for a word:")
-                    if search_query:
-                        filtered_output = {
-                            key: val for key, val in output.items() 
-                            if search_query.lower() in key.lower()
-                        }
-                        st.json(filtered_output)
-
-                    # 📥 **Download Options**
-                    with st.expander("📥 Download Processed Output", expanded=False):
-                        col1, col2 = st.columns(2)
-                        with col1:
-                            st.download_button(
-                                "📄 Download as TXT", 
-                                data=download_as_text(output), 
-                                file_name="extracted_words.txt", 
-                                mime="text/plain"
-                            )
-                        with col2:
-                            st.download_button(
-                                "📂 Download as PDF", 
-                                data=download_as_pdf(output), 
-                                file_name="extracted_words.pdf", 
-                                mime="application/pdf"
-                            )
+    st.header("📂 File Viewer")
+    for uploaded_file in uploaded_files:
+        file_type = uploaded_file.type
+        file_name = uploaded_file.name
+        st.subheader(f"File: {file_name}")
+        
+        if file_type == "application/pdf":
+            # --- Move the Read Aloud Button to the top ---
+            if st.button("🔊 Read Aloud", key=f"{file_name}_read_aloud_top"):
+                try:
+                    # Reset pointer and open the file
+                    uploaded_file.seek(0)
+                    pdf_reader = PdfReader(uploaded_file)
+                    # Extract text from every page to ensure complete content extraction:
+                    text_content = ""
+                    for page in pdf_reader.pages:
+                        page_text = page.extract_text() or ""
+                        text_content += page_text + "\n"
+                        
+                    if not text_content.strip():
+                        st.warning("No extractable text found for speech.")
+                    else:
+                        # Generate audio using the Kokoro-based TTS function
+                        audio = text_to_speech(text_content)
+                        st.audio(audio, format="audio/wav")
+                except Exception as e:
+                    st.error(f"Text-to-speech error: {e}")
+            
+            # Display the PDF content below the read aloud button.
+            with st.expander("View PDF", expanded=True):
+                uploaded_file.seek(0)
+                pdf_viewer(uploaded_file.getvalue(), width=1000, height=1000)
+        
+        elif file_type == "text/plain":
+            text_content = uploaded_file.read().decode("utf-8")
+            uploaded_file.seek(0)
+            with st.expander("View File Content", expanded=True):
+                st.text_area("Content", text_content, height=600)
+            if st.button("🔊 Read Aloud", key=f"{file_name}_read_aloud_text"):
+                if not text_content.strip():
+                    st.warning("File content is empty.")
                 else:
-                    st.error("Error: Processed output is not valid JSON.")
+                    try:
+                        audio = text_to_speech(text_content)
+                        st.audio(audio, format="audio/wav")
+                    except Exception as e:
+                        st.error(f"Text-to-speech error: {e}")
+
+elif pdf_url_input:
+    st.info("🔄 Downloading & Extracting text from PDF URL...")
+    text_from_url = extract_text_from_pdf_url(pdf_url_input)
+    st.header("📄 PDF Content from URL")
+    # --- Read Aloud Button for URL PDF at the Top ---
+    if st.button("🔊 Read Aloud (URL)", key="url_read_aloud_top"):
+        if not text_from_url.strip():
+            st.warning("No extractable text found from PDF URL.")
+        else:
+            try:
+                audio = text_to_speech(text_from_url)
+                st.audio(audio, format="audio/wav")
             except Exception as e:
-                st.error(f"An error occurred: {e}")
-
+                st.error(f"Text-to-speech error: {e}")
+    with st.expander("View PDF Extracted Text", expanded=True):
+        st.text_area("Extracted Text", text_from_url, height=600)
 else:
-    st.warning("Please upload a file or enter a PDF URL to extract text.")
+    st.info("Please upload a file or enter a PDF URL to extract and view content.")
 
-
-
-if st.button("📂 View All Words"):
-    words = get_all_words()
-    
-    print("🔍 Debugging: Retrieved words from database")
-    print(words)  # ✅ Print retrieved words for debugging
-    
-    if words:
-        for word in words:
-            st.write(f"**Word:** {word.get('word', 'Unknown')}")
-            st.write(f"**Definition:** {word.get('definition', 'No definition available')}")
-            st.write("---")
+# ============================
+# Sidebar: Process Extracted Text & Database Tools
+# ============================
+with st.sidebar.container():
+    if uploaded_files or pdf_url_input:
+        extracted_text = extract_text_from_file(uploaded_files) if uploaded_files else text_from_url
+        with st.sidebar.expander("📜 Extracted Text Preview", expanded=False):
+            st.text_area("Extracted Text", extracted_text[:2000], height=300)
+        
+        detected_lang = detect_language(extracted_text)
+        st.sidebar.write(f"**Detected Language:** `{detected_lang.upper()}`")
+        
+        if st.sidebar.button("⚡ Process Extracted Text"):
+            with st.spinner("Processing... Please wait."):
+                try:
+                    processed = asyncio.run(run_long(clean_text(extracted_text)))
+                    if isinstance(processed, (dict, list)):
+                        st.session_state["processed_output"] = processed
+                    else:
+                        st.sidebar.error("Error: Processed output is not valid JSON.")
+                except Exception as e:
+                    st.sidebar.error(f"An error occurred: {e}")
+        
+        if st.session_state["processed_output"]:
+            with st.sidebar.expander("📌 Extracted Words", expanded=True):
+                st.json(st.session_state["processed_output"])
+            
+            search_query = st.sidebar.text_input("🔎 Search in extracted words:")
+            if search_query:
+                filtered = {
+                    key: val for key, val in st.session_state["processed_output"].items()
+                    if search_query.lower() in key.lower()
+                }
+                st.sidebar.json(filtered)
+            
+            with st.sidebar.expander("📥 Download Processed Output", expanded=False):
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.download_button(
+                        "📄 Download as TXT", 
+                        data=download_as_text(st.session_state["processed_output"]), 
+                        file_name="extracted_words.txt", 
+                        mime="text/plain"
+                    )
+                with col2:
+                    st.download_button(
+                        "📂 Download as PDF", 
+                        data=download_as_pdf(st.session_state["processed_output"]), 
+                        file_name="extracted_words.pdf", 
+                        mime="application/pdf"
+                    )
     else:
-        st.warning("No words found in the database.")
+        st.sidebar.warning("Please upload a file or enter a PDF URL to extract text.")
 
+with st.sidebar.container():
+    if st.sidebar.button("📂 View All Words"):
+        words = get_all_words()
+        if words:
+            with st.sidebar.expander("All Words", expanded=True):
+                for word in words:
+                    st.write(f"**Word:** {word.get('word', 'Unknown')}")
+                    st.write(f"**Definition:** {word.get('definition', 'No definition available')}")
+                    st.write("---")
+        else:
+            st.sidebar.warning("No words found in the database.")
 
-# ✅ Sidebar Search
-search_query = st.sidebar.text_input("🔎 Search Word in Database")
-if search_query:
-    word_data = search_word(search_query)
+search_query_db = st.sidebar.text_input("🔎 Search Word in Database")
+if search_query_db:
+    word_data = search_word(search_query_db)
     if word_data:
         st.sidebar.write(f"**Word:** {word_data['word']}")
         st.sidebar.write(f"**Meaning:** {word_data['definition']}")
