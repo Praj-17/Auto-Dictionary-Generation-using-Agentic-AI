@@ -153,6 +153,7 @@ if text:
     #         text = translated_text  # Update for processing
 
     # ⚡ **Process Extracted Text**
+    # ⚡ **Process Extracted Text**
     if st.button("⚡ Process Extracted Text"):
         with st.spinner("Processing... Please wait."):
             try:
