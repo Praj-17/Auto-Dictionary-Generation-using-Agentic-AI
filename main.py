@@ -80,11 +80,10 @@ async def run_long(text, batch_size=10):
 
     return final_results
 
-async def run_short(word):
+async def run_short(word, language):
     """
     Processes a single word or phrase to get its meaning.
     """
-    language = detect_language_full_name(word)
     cleaned_word = clean_text(word)
     input_dict = {"context": cleaned_word, "retry_count": 0, "language": language}
     try:

@@ -331,7 +331,7 @@ with st.sidebar.container():
                 with st.spinner("Searching using run_short..."):
                     try:
                         # Assuming run_short takes the full cleaned text and the search phrase as parameters.
-                        search_result = asyncio.run(run_short(search_phrase_run_short))
+                        search_result = asyncio.run(run_short(search_phrase_run_short, detected_lang))
                         st.json(search_result)
                     except Exception as e:
                         st.error(f"Error executing run_short: {e}")
