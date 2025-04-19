@@ -3,7 +3,7 @@ import asyncio
 from dotenv import load_dotenv
 from src.utils.split_text import chunk_text, clean_text
 from src.utils.to_pydantic import TextToPydanticConverter
-from src.crew import auto_dict_crew
+from src.crew import auto_dict_crew, auto_dict_crew_single
 from src.models.models import Dictionary
 from src.database import save_word
 from src.kokoro_tts import KokoroTTSGenerator
@@ -55,6 +55,32 @@ async def process_chunk(input_dict):
     except Exception as e:
         pass
     return {}
+async def process_chunk_single(input_dict):
+    """
+    Processes a single chunk.
+    """
+    try:
+        result = await auto_dict_crew_single.kickoff_async(inputs=input_dict)
+        print(result)
+        if isinstance(result, CrewOutput):
+            # Convert the result to a Pydantic model
+                raw_data = result.model_dump().get("raw")
+                raw_data = raw_data.replace("json", "").strip("```")
+                if isinstance(raw_data, str):
+                    try:
+                        raw_dict = Dictionary.model_validate_json(raw_data)
+                        return raw_dict.model_dump()
+                    except json.JSONDecodeError as e:
+                        raw_dict = {}
+                        return raw_dict
+                else:
+                    raw_dict = {}
+                    return raw_dict
+        elif isinstance(result, Dictionary):
+            return result
+    except Exception as e:
+        print(f"Error processing chunk: {e}")
+    return {}
 
 async def run_long(text, batch_size=10):
     """
@@ -85,9 +111,9 @@ async def run_short(word, language):
     Processes a single word or phrase to get its meaning.
     """
     cleaned_word = clean_text(word)
-    input_dict = {"context": cleaned_word, "retry_count": 0, "language": language}
+    input_dict = {"keyword": cleaned_word, "retry_count": 2, "language": language}
     try:
-        result = await process_chunk(input_dict)
+        result = await process_chunk_single(input_dict)
         if result:
             return result
     except Exception as e:
@@ -96,8 +122,10 @@ async def run_short(word, language):
 
 if __name__ == "__main__":
     text = """Las aves son animales vertebrados que se caracterizan por tener plumas, alas y pico. La mayoría de las aves pueden volar, aunque algunas especies, como el pingüino o el avestruz, no lo hacen. Viven en diversos hábitats alrededor del mundo y desempeñan un papel importante en los ecosistemas, ayudando en la polinización, el control de insectos y la dispersión de semillas. Además, su canto y colorido plumaje las hacen fascinantes para muchas personas."""
+    text = "Anatomia"
+    output = asyncio.run(run_short(text, "Spanish"))
 
-    output = asyncio.run(run_long(clean_text(text)))
+    print(output)
 
     if isinstance(output, dict) or isinstance(output, list):
         with open("outputs/output_spanish_4.json", "w") as f:

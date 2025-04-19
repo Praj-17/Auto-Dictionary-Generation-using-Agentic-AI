@@ -181,7 +181,7 @@ if uploaded_files:
             # Display the PDF content below the Read Aloud button.
             with st.expander("View PDF", expanded=True):
                 uploaded_file.seek(0)
-                pdf_viewer(uploaded_file.getvalue(), width=1000, height=1000)
+                pdf_viewer(uploaded_file.getvalue(), width=1000, height=1000, render_text=True, on_annotation_click = run_short)
         
         elif file_type == "text/plain":
             text_content = uploaded_file.read().decode("utf-8")

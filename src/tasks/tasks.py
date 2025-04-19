@@ -1,5 +1,5 @@
 from crewai import Task
-from src.agents.agent import keyword_extractor, keyword_researcher, generate_dictionary_agent
+from src.agents.agent import keyword_extractor, keyword_researcher, generate_dictionary_agent, keyword_researcher_single
 from src.models.models import Dictionary
 
 keyword_task = Task(
@@ -16,14 +16,12 @@ keyword_task = Task(
 
 research_task = Task(
   agent=keyword_researcher,
-  description= """  1. Research the extracted keywords online.
-    2. Define each keyword with an example.
-    3. Determine the correct POS tag.
-    4. Avoid redundancy.
-    5. Keep keywords in the original language.
-    6. If the input is a single word or phrase, research only its definition, etc., without adding other words.
-    7. Strictly do not research any new or related words, only find definations for the given keywords.
-    
+  description= """  
+    1. Research the extracted keywords online.
+    2. Determine the correct part of speech.
+    3. Keep keywords, definations and other metadata in {language}.
+    4. If the input is a single word or phrase, research only its definition, etc., without adding other words.
+
     POS Tag should be one of these:
 
     ADJ = "ADJ"  # Adjective
@@ -48,7 +46,7 @@ research_task = Task(
 
 generate_dictionary_task = Task(
   agent=generate_dictionary_agent,
-  description= """      1. Review the keywords and definitions.
+  description= """ 1. Review the keywords and definitions.
     2. Create a structured dictionary.
     3. Ensure clarity and maintain the original language.""",
   expected_output="""
@@ -84,3 +82,15 @@ generate_dictionary_task = Task(
 """, 
 output_pydantic=Dictionary
 )
+
+
+research_task_single = Task(
+  agent=keyword_researcher_single,
+  description= """  
+    1. Research the keyword online.
+    2. Determine the correct POS tag.
+    3. Strictly do not research any new or related words, only find definations for the given keywords.""",
+  expected_output=" A structured string of the keyword  with definition, POS Tag in {language}.",
+
+) 
+

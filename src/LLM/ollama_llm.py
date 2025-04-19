@@ -27,13 +27,13 @@ ollama_llm = OllamaLLM(
     base_url=os.environ.get("API_BASE", "http://ollama:11434"),
 )
 
-# Check if the model is running by invoking it with a simple prompt
-try:
-    response = ollama_llm.invoke("Hello, are you running?")
-    print("Model Response:", response)
-except Exception as e:
-    print("Error invoking the model:", e)
+# # Check if the model is running by invoking it with a simple prompt
+# try:
+#     response = ollama_llm.invoke("Hello, are you running?")
+#     print("Model Response:", response)
+# except Exception as e:
+#     print("Error invoking the model:", e)
 
 
-# Debug prints
-print("Keyword Extractor LLM:", ollama_llm.model)
+# # Debug prints
+# print("Keyword Extractor LLM:", ollama_llm.model)
